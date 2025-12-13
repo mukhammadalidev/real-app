@@ -1,0 +1,222 @@
+<!-- templates/base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Ish Izla{% endblock %}</title>
+    
+    <!-- 🔥 SEO Optimization -->
+<meta name="description" content="Buxoroda eng yaxshi ish o‘rinlarini toping. Bepul rezyume qoldiring, ishdan beruvchilar bilan tez ulaning va yangi imkoniyatlarni kashf qiling. Buxoroda-ish.uz – Sizning kelajakdagi ishingiz shu yerda!">
+
+<meta name="keywords" content="Buxoro ish, ish o‘rinlari Buxoro, Buxoroda ish topish, vakansiya Buxoro, ish izlash, ish izla, buxoroda-ish.uz, Buxoro bo‘sh ish o‘rinlari">
+
+<meta name="author" content="Ish Izla">
+<meta name="yandex-verification" content="dbdbdfc35b00fe4f" />
+
+<!-- Open Graph (Facebook, Telegram, Instagram share uchun) -->
+<meta property="og:title" content="Buxoroda Ish Toping – Eng Yaxshi Ish O‘rinlari | Ish Izla">
+<meta property="og:description" content="Buxorodagi eng so‘nggi ish e’lonlari. Tez va oson ish toping. Ish beruvchilar bilan bevosita bog‘laning.">
+<meta property="og:image" content="https://buxoroda-ish.uz/static/images/logo.png">
+<meta property="og:url" content="https://buxoroda-ish.uz">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Buxoroda Ish Toping – Ish Izla">
+<meta name="twitter:description" content="Buxorodagi eng yaxshi vakansiyalar bir joyda. Endi ish topish oson!">
+<meta name="twitter:image" content="https://buxoroda-ish.uz/static/images/logo.png">
+
+<!-- Canonical (Google duplicate content oldini oladi) -->
+<link rel="canonical" href="https://buxoroda-ish.uz/">
+
+<!-- Mobile-friendly -->
+<meta name="theme-color" content="#0d6efd">
+
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+
+    <style>
+        /* Top Loader Style */
+        #top-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: #0d6efd;
+            /* Bootstrap primary */
+            z-index: 999999;
+            transition: width 0.4s ease;
+        }
+
+        /* Navbar hover effect */
+        .nav-link:hover {
+            color: #0d6efd !important;
+            transition: 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="top-loader"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3 sticky-top nav-glass">
+        <div class="container">
+
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="http://buxoroda-ish.uz/employers_logos/logo.png" height="45" class="rounded shadow-sm" alt="Logo">
+                <span class="ms-2 fw-bold fs-4 text-dark brand-text">Ish Izla</span>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar">
+                <i class="fa fa-bars fs-2 text-primary"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3 text-center mt-lg-0 mt-4">
+
+                    <li class="nav-item">
+                        <a href="/" class="nav-link custom-link">Asosiy</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{% url 'search' %}" class="nav-link custom-link">Ishlar</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{% url 'faq' %}" class="nav-link custom-link">FAQs</a>
+                    </li>
+
+                    {% if request.user.user_roles == 'Employer' %}
+                    <li class="nav-item">
+                        <a href="{% url 'job:add_ads' %}" class="btn btn-primary px-3 py-2 rounded-pill mt-lg-0 mt-3">
+                            <i class="fa fa-plus me-1"></i> Elоn joylash
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'users:profile' %}" class="btn btn-outline-primary px-3 py-2 rounded-pill">
+                            <i class="fa fa-user"></i> Profil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'users:logout' %}" class="btn btn-outline-danger px-3 py-2 rounded-pill">
+                            <i class="fa fa-sign-out-alt"></i> Chiqish
+                        </a>
+                    </li>
+
+                    {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'users:login' %}" class="btn btn-success px-4 py-2 rounded-pill">
+                            Kirish
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Page content -->
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+
+    <!-- templates/base.html footer qismi -->
+    <!-- Footer -->
+    <footer class="bg-dark text-light pt-5 pb-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <!-- About -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-uppercase mb-3">Ish Izla</h5>
+                    <p>Bizning platformamiz orqali eng so‘nggi ish imkoniyatlarini toping va o‘z karyerangizni
+                        rivojlantiring.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-md-3 mb-4">
+                    <h5 class="text-uppercase mb-3">Tezkor Linklar</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-light text-decoration-none">Asosiy</a></li>
+                        <li><a href="/about" class="text-light text-decoration-none">Biz Haqimizda</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Pricing</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="col-md-5 mb-4">
+                    <h5 class="text-uppercase mb-3">Kontakt</h5>
+                    <p><i class="fa fa-map-marker-alt me-2"></i> Buxoro, O‘zbekiston</p>
+                    <p>
+    <i class="fa fa-envelope me-2"></i>
+    <a href="mailto:info@buxoroda-ish.uz" class="text-light text-decoration-none">
+        info@buxoroda-ish.uz
+    </a>
+</p>
+
+                    <p><i class="fa fa-phone me-2"></i> +998 99 260 62 96</p>
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="bg-light">
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p class="mb-0">&copy; {{ year }} Ish Izla. Barcha huquqlar himoyalangan.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let loader = document.getElementById("top-loader");
+            loader.style.width = "60%";
+            window.onload = function () {
+                loader.style.width = "100%";
+                setTimeout(() => loader.style.opacity = "0", 700);
+                setTimeout(() => loader.style.display = "none", 1200);
+            };
+        });
+
+
+        // const year = new Date().getFullYear();
+        // document.querySelectorAll('footer p').forEach(p => {
+        //     p.innerHTML = p.innerHTML.replace('{{ year }}', year);
+        // });
+
+
+    </script>
+</body>
+
+</html>

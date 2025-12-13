@@ -1,0 +1,302 @@
+[
+    {
+        "model": "app.CategoryModel",
+        "pk": 1,
+        "fields": {
+            "title": "IT / Dasturlash",
+            "image": "https://example.com/it.jpg"
+        }
+    },
+    {
+        "model": "app.CategoryModel",
+        "pk": 2,
+        "fields": {
+            "title": "Marketing",
+            "image": "https://example.com/marketing.jpg"
+        }
+    },
+    {
+        "model": "app.CategoryModel",
+        "pk": 3,
+        "fields": {
+            "title": "SMM",
+            "image": "https://example.com/smm.jpg"
+        }
+    },
+    {
+        "model": "app.CategoryModel",
+        "pk": 4,
+        "fields": {
+            "title": "Dizayn",
+            "image": "https://example.com/design.jpg"
+        }
+    },
+    {
+        "model": "app.CategoryModel",
+        "pk": 5,
+        "fields": {
+            "title": "O‘qituvchilik",
+            "image": "https://example.com/teacher.jpg"
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 1,
+        "fields": {
+            "title": "Junior Python Dasturchi",
+            "description": "Kompaniyamizga junior python dasturchi kerak.",
+            "location": "Toshkent",
+            "link": "https://example.com/job1",
+            "company": "SoftLine",
+            "job_time": "9:00 dan 18:00",
+            "category": 1
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 2,
+        "fields": {
+            "title": "Middle Django Developer",
+            "description": "Django framework bilan kamida 2 yil tajriba.",
+            "location": "Buxoro",
+            "link": "https://example.com/job2",
+            "company": "NextTech",
+            "job_time": "10:00 dan 19:00",
+            "category": 1
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 3,
+        "fields": {
+            "title": "ReactJS Frontend Developer",
+            "description": "SPA loyihalar bilan ishlay oladigan frontendchi.",
+            "location": "Samarqand",
+            "link": "https://example.com/job3",
+            "company": "WebStudio",
+            "job_time": "9:00 dan 18:00",
+            "category": 1
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 4,
+        "fields": {
+            "title": "Marketing Mutaxassisi",
+            "description": "Digital marketing bo‘yicha tajribali xodim kerak.",
+            "location": "Toshkent",
+            "link": "https://example.com/job4",
+            "company": "GlobalTrade",
+            "job_time": "9:00 dan 17:00",
+            "category": 2
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 5,
+        "fields": {
+            "title": "Content Manager",
+            "description": "Kreativ kontent yaratish.",
+            "location": "Andijon",
+            "link": "https://example.com/job5",
+            "company": "SmartMarketing",
+            "job_time": "9:00 dan 18:00",
+            "category": 2
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 6,
+        "fields": {
+            "title": "SEO Mutaxassisi",
+            "description": "Google SEO, analitika.",
+            "location": "Toshkent",
+            "link": "https://example.com/job6",
+            "company": "SEOPro",
+            "job_time": "9:00 dan 18:00",
+            "category": 2
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 7,
+        "fields": {
+            "title": "SMM Manager",
+            "description": "Postlar, reja, statistika.",
+            "location": "Namangan",
+            "link": "https://example.com/job7",
+            "company": "MediaHub",
+            "job_time": "10:00 dan 18:00",
+            "category": 3
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 8,
+        "fields": {
+            "title": "TikTok Operator",
+            "description": "TikTok kontent yaratish.",
+            "location": "Toshkent",
+            "link": "https://example.com/job8",
+            "company": "ViralMedia",
+            "job_time": "9:00 dan 16:00",
+            "category": 3
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 9,
+        "fields": {
+            "title": "Instagram Targetolog",
+            "description": "Reklama kampaniyalarini boshqarish.",
+            "location": "Buxoro",
+            "link": "https://example.com/job9",
+            "company": "AdBoost",
+            "job_time": "9:00 dan 18:00",
+            "category": 3
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 10,
+        "fields": {
+            "title": "Grafik Dizayner",
+            "description": "Photoshop, Illustrator bilan ishlay olishi kerak.",
+            "location": "Toshkent",
+            "link": "https://example.com/job10",
+            "company": "ArtDesign",
+            "job_time": "9:00 dan 18:00",
+            "category": 4
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 11,
+        "fields": {
+            "title": "UI/UX Dizayner",
+            "description": "Figma bilan ishlash tajribasi.",
+            "location": "Nukus",
+            "link": "https://example.com/job11",
+            "company": "CreativeLab",
+            "job_time": "9:00 dan 17:00",
+            "category": 4
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 12,
+        "fields": {
+            "title": "Motion Dizayner",
+            "description": "After Effects bilan animatsiya yaratish.",
+            "location": "Farg‘ona",
+            "link": "https://example.com/job12",
+            "company": "StudioMotion",
+            "job_time": "10:00 dan 18:00",
+            "category": 4
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 13,
+        "fields": {
+            "title": "Ingliz Tili O‘qituvchisi",
+            "description": "IELTS 6.0+ bo‘lishi afzal.",
+            "location": "Toshkent",
+            "link": "https://example.com/job13",
+            "company": "EduCenter",
+            "job_time": "9:00 dan 18:00",
+            "category": 5
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 14,
+        "fields": {
+            "title": "Matematika O‘qituvchisi",
+            "description": "Maktab o‘quvchilari bilan ishlay olishi kerak.",
+            "location": "Guliston",
+            "link": "https://example.com/job14",
+            "company": "SmartSchool",
+            "job_time": "8:00 dan 16:00",
+            "category": 5
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 15,
+        "fields": {
+            "title": "Rus Tili O‘qituvchisi",
+            "description": "Grammatikani yaxshi tushuntira olishi kerak.",
+            "location": "Buxoro",
+            "link": "https://example.com/job15",
+            "company": "LinguaPro",
+            "job_time": "9:00 dan 17:00",
+            "category": 5
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 16,
+        "fields": {
+            "title": "Backend Java Developer",
+            "description": "Spring Framework bilan ishlash.",
+            "location": "Toshkent",
+            "link": "https://example.com/job16",
+            "company": "FinTechSoft",
+            "job_time": "9:00 dan 18:00",
+            "category": 1
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 17,
+        "fields": {
+            "title": "Fullstack Developer",
+            "description": "React + Django fullstack.",
+            "location": "Andijon",
+            "link": "https://example.com/job17",
+            "company": "UpDev",
+            "job_time": "9:00 dan 18:00",
+            "category": 1
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 18,
+        "fields": {
+            "title": "Marketing Analitik",
+            "description": "Google Data Studio, Excel.",
+            "location": "Toshkent",
+            "link": "https://example.com/job18",
+            "company": "DataLine",
+            "job_time": "9:00 dan 18:00",
+            "category": 2
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 19,
+        "fields": {
+            "title": "SMM Copywriter",
+            "description": "Post yozish, rejalashtirish.",
+            "location": "Toshkent",
+            "link": "https://example.com/job19",
+            "company": "SocialArt",
+            "job_time": "9:00 dan 17:00",
+            "category": 3
+        }
+    },
+    {
+        "model": "app.AdvertisementModel",
+        "pk": 20,
+        "fields": {
+            "title": "Photoshop Mutaxassisi",
+            "description": "Bannerlar, reklama dizaynlari.",
+            "location": "Xorazm",
+            "link": "https://example.com/job20",
+            "company": "DesignPro",
+            "job_time": "9:00 dan 18:00",
+            "category": 4
+        }
+    }
+]

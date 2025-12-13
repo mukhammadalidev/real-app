@@ -1,0 +1,303 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Ish Kategoriyalari{% endblock %}
+
+{% block content %}
+<!-- <style>
+    .job-card {
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.job-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+</style> -->
+
+<style>
+    /* Global font & spacing */
+    body {
+        background-color: #f5f7fa;
+        font-family: 'Inter', sans-serif;
+    }
+
+    section-title {
+        font-weight: 700;
+    }
+
+    /* HERO SECTION */
+    .hero-box {
+        background: linear-gradient(45deg, #0d6efd, #01398a);
+        color: white;
+        text-align: center;
+        padding: 60px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .hero-box h1 {
+        font-size: 52px;
+    }
+
+    .hero-box p {
+        opacity: 0.9;
+        font-size: 18px;
+    }
+
+
+    /* CATEGORY CARD DESIGN */
+    .category-card {
+        border-radius: 16px;
+        padding: 25px;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        transition: 0.35s ease;
+    }
+
+    .category-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.15);
+        border-color: transparent;
+    }
+
+    .category-card img {
+        border-radius: 8px;
+    }
+
+
+    /* JOB CARD */
+    .job-card {
+        border-radius: 20px;
+        padding: 15px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        transition: 0.3s ease;
+    }
+
+    .job-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 18px 28px rgba(0, 0, 0, 0.22);
+    }
+
+    .job-card h5 a:hover {
+        color: #0d6efd;
+    }
+
+
+    /* FORM design */
+    .contact-box form {
+        background: white;
+        padding: 28px;
+        border-radius: 18px;
+        box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.10);
+    }
+
+    .contact-box .form-control {
+        padding: 12px 14px;
+        border-radius: 10px;
+    }
+
+
+    /* FOOTER */
+    footer {
+        background: #111;
+        padding-top: 55px;
+        border-radius: 30px 30px 0 0;
+    }
+
+    footer a:hover {
+        color: #0d6efd !important;
+    }
+
+
+    /* BUTTON DESIGN UPGRADE */
+    .btn-primary {
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 600;
+    }
+
+    .btn-outline-primary {
+        border-radius: 10px;
+    }
+
+    .btn-success {
+        border-radius: 10px;
+    }
+</style>
+
+<div class="bg-primary text-light text-center p-5 rounded mb-4">
+    <h1 class="display-5 fw-bold">Eng so‘nggi ish imkoniyatlarini toping</h1>
+    <p class="lead">Siz uchun to‘plangan ishlar va professional imkoniyatlar</p>
+    <a href="#jobs" class="btn btn-light btn-lg">Ishlarni ko‘rish</a>
+</div>
+
+
+<!-- Qidiruv formasi -->
+<div class="row mx-auto my-4">
+    <div class="col-12 col-md-6 mx-auto">
+        <form class="input-group" method="get" action="{% url 'search' %}">
+            <input type="search" name="q" class="form-control" placeholder="Frontend, Dasturchi, Marketing..."
+                value="{{ query }}" />
+            <button class="btn btn-primary">
+                <i class="fa-solid fa-magnifying-glass"></i> Qidirish
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Kategoriyalar -->
+<div class="container py-5">
+    <h2 class="fw-bold mb-4 text-center">Ish Kategoriyalari</h2>
+    <div class="row g-4">
+        {% for category in categories.all %}
+        <div class="col-12 col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3 h-100 position-relative">
+                <span class="badge bg-primary position-absolute top-0 end-0 me-2 mt-2">12</span>
+                <img height="100" src="{{category.image}}" width="150" class="mx-auto mb-3 object-fit-contain" />
+                <h5 class="fw-semibold">{{category.title}}</h5>
+                <a href="{% url 'job:category' category.pk %}" class="btn btn-outline-primary mt-2">Ko'proq</a>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+<div id="jobs" class="mb-5">
+    <h2 class="mb-4 fw-bold text-center">🕵️‍♂️ So‘nggi Ishlar</h2>
+    <div class="row g-4">
+
+
+        {% for job in latest_jobs %}
+        <div class="col-md-4 mb-3">
+            <div class="card hh-card border rounded-4 shadow-sm">
+
+                <div class="card-body">
+
+                    <!-- Salary -->
+                    {% if job.salary %}
+                    <div class="text-primary fw-bold mb-2" style="font-size: 18px;">
+                        {{ job.salary }}
+                    </div>
+                    {% endif %}
+
+                    <!-- Title -->
+                    <h5 class="fw-semibold mb-2" style="font-size: 20px;">
+                        <a href="{% url 'job:job-detail' job.pk %}" class="text-dark text-decoration-none">
+                            {{ job.title }}
+                        </a>
+                    </h5>
+
+                    <!-- Company + Logo -->
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{{ job.employer.logo.url }}" width="45" height="45" style="object-fit: contain;"
+                            class="rounded border me-2 bg-white">
+
+                        <div>
+                            <div class="text-muted small fw-semibold">
+                                {{ job.employer.company_name }}
+                            </div>
+                            <div class="text-muted small">
+                                📍 {{ job.location }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Short description -->
+                    <p class="text-muted small mb-3">
+                        {{ job.description|truncatewords:18 }}
+                    </p>
+
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span>🕒 {{ job.created_at|date:"d M, Y" }}</span>
+                        <a href="{% url 'job:job-detail' job.pk %}" class="text-primary fw-semibold">Batafsil →</a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-md-12">
+                    <div class="row g-4">
+                        <!-- Chap tomon: matn -->
+                <!-- Chap tomon: matn -->
+<div class="col-md-6 d-flex flex-column justify-content-center">
+    <h2 class="fw-bold">Biz bilan bog‘laning</h2>
+    <p class="text-muted">
+        Savollaringiz bo‘lsa yoki yordam kerak bo‘lsa, bizga yozing. Biz tez orada siz bilan bog‘lanamiz va barcha savollaringizga javob beramiz.
+    </p>
+    <ul class="list-unstyled mt-3">
+        <li class="mb-2">
+            <i class="fa fa-phone me-2"></i>
+            <a href="tel:+998992606296" class="text-dark text-decoration-none">
+                +998 99 260 62 96
+            </a>
+        </li>
+        <li class="mb-2">
+            <i class="fa fa-envelope me-2"></i>
+            <a href="mailto:info@buxoroda-ish.uz" class="text-dark text-decoration-none">
+                info@buxoroda-ish.uz
+            </a>
+        </li>
+        <li>
+            <i class="fa fa-map-marker-alt me-2"></i>Buxoro, O‘zbekiston
+        </li>
+    </ul>
+</div>
+
+
+
+                        <!-- O‘ng tomon: forma -->
+                        <div class="col-md-6">
+                            <form method="POST" action="{% url 'contact' %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Ism</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Ismingiz"
+                                        required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        placeholder="Email manzilingiz" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Xabar</label>
+                                    <textarea class="form-control" id="message" name="message" rows="5"
+                                        placeholder="Xabaringizni kiriting" required></textarea>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fa fa-paper-plane me-1"></i> Yuborish
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+</div>
+
+<style>
+    .job-card:hover {
+        transform: translateY(-5px);
+        transition: 0.3s;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+    }
+</style>
+
+
+{% endblock %}

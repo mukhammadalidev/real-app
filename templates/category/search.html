@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- Search Bar -->
+    <form method="GET" action="{% url 'search' %}">
+        <div class="input-group mb-4">
+            <input type="text" class="form-control form-control-lg"
+                placeholder="Kasb nomi, kompaniya yoki kalit so‘z..." name="q" value="{{ query }}">
+            <button class="btn btn-primary btn-lg" type="submit">Qidirish</button>
+        </div>
+    </form>
+
+    <h4 class="mb-3">Natijalar: {{ jobs.count }}</h4>
+
+    <!-- Job list -->
+    {% for job in jobs %}
+    <div class="card mb-3 shadow-sm p-3">
+        <div class="d-flex justify-content-between">
+
+            <div>
+                <h5 class="mb-1">{{ job.title|default:"Sarlovha mavjud emas"|truncatewords:10 }}</h5>
+
+                <p class="text-muted mb-1">{{ job.employer.company_name }}</p>
+                <p class="mb-1">
+                    <i class="bi bi-geo-alt"></i> {{ job.location }}
+                </p>
+                <span class="badge bg-success">
+                    {{ job.salary|default:"Kelishiladi" }}
+                </span>
+            </div>
+
+            <div class="text-end">
+                <a href="{% url 'job:job-detail' job.pk %}" class="btn btn-outline-primary">
+                    Ko‘rish
+                </a>
+                {% if request.user.is_superuser %}
+                <form method="post" action="{% url 'job_delete' job.pk %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Rostdan ham o‘chirmoqchimisiz?');">
+                        <i class="fa-solid fa-trash"></i> o‘chirish
+                    </button>
+                </form>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">Hech qanday ish topilmadi 😕</p>
+    {% endfor %}
+</div>
+{% endblock %}

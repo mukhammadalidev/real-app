@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Savol-Javoblar (FAQ){% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Sahifa sarlavhasi -->
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Ko‘p so‘raladigan savollar</h1>
+        <p class="text-muted">Sizda savol bo‘lishi tabiiy — biz esa javob beramiz</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="accordion" id="faqAccordion">
+
+                <!-- 1-savol -->
+                <div class="accordion-item shadow-sm mb-3 border-0 rounded-3">
+                    <h2 class="accordion-header" id="faqHeadingOne">
+                        <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqOne">
+                            Qanday qilib ishga topshirishim mumkin?
+                        </button>
+                    </h2>
+                    <div id="faqOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Sizga yoqqan ishni oching va “Ishga topshirish” tugmasini bosing. Agar ro‘yxatdan o‘tmagan bo‘lsangiz, tizim sizni avtomatik ravishda ro‘yxatdan o‘tishga yo‘naltiradi.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2-savol -->
+                <div class="accordion-item shadow-sm mb-3 border-0 rounded-3">
+                    <h2 class="accordion-header" id="faqHeadingTwo">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqTwo">
+                            Qanday qilib e'lon joylashtirish mumkin?
+                        </button>
+                    </h2>
+                    <div id="faqTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Profilingizga kirgan holda “E'lon berish” bo‘limi orqali yangi e'lon joylashtirishingiz mumkin.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3-savol -->
+                <div class="accordion-item shadow-sm mb-3 border-0 rounded-3">
+                    <h2 class="accordion-header" id="faqHeadingThree">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqThree">
+                            Platforma bepulmi?
+                        </button>
+                    </h2>
+                    <div id="faqThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Ha, platformadan foydalanish mutlaqo bepul. Ish beruvchilar ba'zi premium xizmatlarni tanlashlari mumkin.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4-savol -->
+                <div class="accordion-item shadow-sm mb-3 border-0 rounded-3">
+                    <h2 class="accordion-header" id="faqHeadingFour">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqFour">
+                            Ish beruvchilar qanday tekshiriladi?
+                        </button>
+                    </h2>
+                    <div id="faqFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Har bir ish beruvchining profili aloqa raqami, kompaniya nomi va faoliyat turi bo‘yicha tekshiriladi. Shubhali hisoblar bloklanadi.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-savol -->
+                <div class="accordion-item shadow-sm mb-3 border-0 rounded-3">
+                    <h2 class="accordion-header" id="faqHeadingFive">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqFive">
+                            Ish topishim uchun qancha vaqt ketadi?
+                        </button>
+                    </h2>
+                    <div id="faqFive" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Bu sizning mahoratingiz, rezume sifatiga va bo‘sh ish o‘rinlariga bog‘liq. O‘rtacha foydalanuvchilarimiz 3–7 kun ichida mos ish topishadi.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6-savol -->
+                <div class="accordion-item shadow-sm mb-3 border-0 rounded-3">
+                    <h2 class="accordion-header" id="faqHeadingSix">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqSix">
+                            Arizalarimni qayerdan ko‘ra olaman?
+                        </button>
+                    </h2>
+                    <div id="faqSix" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Profilingizdagi “Arizalarim” bo‘limida barcha topshirilgan ishlar ro‘yxatini ko‘rishingiz mumkin.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7-savol -->
+                <div class="accordion-item shadow-sm mb-3 border-0 rounded-3">
+                    <h2 class="accordion-header" id="faqHeadingSeven">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqSeven">
+                            Kompaniya bilan qanday bog‘lanaman?
+                        </button>
+                    </h2>
+                    <div id="faqSeven" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Har bir e'lon sahifasida ish beruvchining telefon raqami, manzili va ko‘pincha ijtimoiy tarmoqlari ko‘rinadi.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8-savol -->
+                <div class="accordion-item shadow-sm mb-3 border-0 rounded-3">
+                    <h2 class="accordion-header" id="faqHeadingEight">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqEight">
+                            Profil yaratish majburiymi?
+                        </button>
+                    </h2>
+                    <div id="faqEight" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Ha, ariza yuborish va ish beruvchilar bilan bog‘lanish uchun profil bo‘lishi shart. Bu xavfsizlik va tezkor aloqa uchun kerak.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
