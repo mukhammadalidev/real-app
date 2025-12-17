@@ -9,3 +9,14 @@ services:
     volumes:
       - .:/backend
     restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DEBUG=1
+
+  bot:
+    build: .
+    container_name: ishchi_bot
+    volumes:
+      - .:/backend
+    restart: always
+    command: python /backend/bot.py
