@@ -3,6 +3,9 @@ from .models import Job,Application
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib import messages
 from .forms import AdsEmployer,ApplicationForm
+from .serializers import JobSerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
 class AdvertismentView(View):
     def get(self,request,pk):
         products = Job.objects.filter(category__pk=pk)
@@ -80,3 +83,19 @@ class ApplicationView(View):
 
 
 
+
+
+
+
+
+class AdvertisementAPIView(APIView):
+     def get(self,request,category_pk=None):
+        jobs = Job.objects.all()
+        serializer = JobSerializer(jobs, many=True)
+        return Response(serializer.data)
+
+class AdvertisementDetailAPIView(APIView):
+    def get(self, request, pk):
+        job = get_object_or_404(Job, pk=pk)
+        serializer = JobSerializer(job)
+        return Response(serializer.data)

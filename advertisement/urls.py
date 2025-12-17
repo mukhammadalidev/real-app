@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AdvertismentView,Job_DetailView,AdsEmployerView,ApplicationView
+from .views import AdvertismentView,Job_DetailView,AdsEmployerView,ApplicationView,AdvertisementAPIView,AdvertisementDetailAPIView
 
 app_name = "job"
 urlpatterns = [
@@ -7,6 +7,8 @@ urlpatterns = [
     path('job/<int:pk>/',Job_DetailView.as_view(),name="job-detail"),
     path('add/',AdsEmployerView.as_view(),name="add_ads"),
     path('apply/<int:job_pk>/', ApplicationView.as_view(), name='apply_for_job'),
+    path('api/jobs/', AdvertisementAPIView.as_view(), name='advertisement-list'),
+    path('api/jobs/<int:pk>/', AdvertisementDetailAPIView.as_view(), name='advertisement-detail'),
 
 
 ]
