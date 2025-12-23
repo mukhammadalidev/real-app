@@ -1,8 +1,8 @@
 from django.views import View
-from .models import Job,Application
+from .models import Job,Application,Worker
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib import messages
-from .forms import AdsEmployer,ApplicationForm
+from .forms import AdsEmployer,ApplicationForm,WorkerForm
 from .serializers import JobSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -99,3 +99,55 @@ class AdvertisementDetailAPIView(APIView):
         job = get_object_or_404(Job, pk=pk)
         serializer = JobSerializer(job)
         return Response(serializer.data)
+    
+
+
+class CreateWorker(View):
+    def get(self,request):
+        form = WorkerForm()
+        return render(request,'ads/create_worker.html',{"form":form})
+    
+    def post(self,request):
+        form = WorkerForm(request.POST)
+        if form.is_valid():
+            worker = form.save(commit=False)
+            worker.user = request.user
+            worker.save()
+            return redirect('home')
+        return render(request,'ads/create_worker.html',{"form":form})
+    
+
+
+class WorkerView(View):
+    def get(self,request):
+        workers = Worker.objects.filter(status=True)
+        print(workers)
+        return render(request,'ads/worker_list.html',{"workers":workers})
+    
+
+class WorkerDetailView(View):
+    def get(self, request, pk):
+        worker = get_object_or_404(Worker, pk=pk)
+        return render(request, 'ads/worker_detail.html', {"worker": worker})
+    
+class WorkerDeleteView(View):
+    def post(self, request, pk):
+        worker = get_object_or_404(Worker, pk=pk)
+        worker.delete()
+        messages.success(request, "Ishchi e'loni muvaffaqiyatli o'chirildi.")
+        return redirect('job:worker_list')
+    
+class WorkerEditView(View):
+    def get(self, request, pk):
+        worker = get_object_or_404(Worker, pk=pk)
+        form = WorkerForm(instance=worker)
+        return render(request, 'ads/edit_worker.html', {"form": form, "worker": worker})
+
+    def post(self, request, pk):
+        worker = get_object_or_404(Worker, pk=pk)
+        form = WorkerForm(request.POST, instance=worker)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Ishchi e'loni muvaffaqiyatli yangilandi.")
+            return redirect('job:worker-detail', pk=worker.pk)
+        return render(request, 'ads/edit_worker.html', {"form": form, "worker": worker})

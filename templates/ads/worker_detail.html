@@ -8,7 +8,7 @@
         font-family: 'Inter', sans-serif;
     }
 
-    .job-wrapper {
+    .worker-wrapper {
         max-width: 900px;
         margin: auto;
     }
@@ -32,6 +32,26 @@
         font-size: 15px;
     }
 
+    /* Status badge */
+    .status-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-left: 12px;
+    }
+
+    .status-active {
+        background: #d1f4e0;
+        color: #0d9448;
+    }
+
+    .status-inactive {
+        background: #fff3cd;
+        color: #856404;
+    }
+
     /* Info groups */
     .info-grid-title {
         font-size: 13px;
@@ -47,46 +67,20 @@
         color: #222;
     }
 
-    /* Company block */
-    .company-box {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-    }
-
-    .company-logo {
-        width: 65px;
-        height: 65px;
-        border-radius: 14px;
+    /* Profile avatar */
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
+        font-size: 36px;
         font-weight: 700;
         color: white;
-        border: 2px solid #fff;
+        border: 3px solid #fff;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        flex-shrink: 0;
-    }
-
-    .company-logo img {
-        width: 100%;
-        height: 100%;
-        border-radius: 12px;
-        object-fit: cover;
-    }
-
-    .company-box h5 {
-        margin-bottom: 4px;
-        font-size: 18px;
-        font-weight: 600;
-        color: #222;
-    }
-
-    .company-box a {
-        font-size: 14px;
-        font-weight: 500;
     }
 
     /* Soft button */
@@ -114,9 +108,9 @@
         padding: 11px 22px;
         font-weight: 600;
         border: none;
-        transition: .2s;
         text-decoration: none;
         display: inline-block;
+        transition: .2s;
     }
 
     .btn-main:hover {
@@ -131,11 +125,14 @@
         padding: 11px 22px;
         font-weight: 600;
         border: none;
+        text-decoration: none;
+        display: inline-block;
         transition: .2s;
     }
 
     .btn-success-custom:hover {
         background: #157347;
+        color: white;
     }
 
     .section-title {
@@ -151,124 +148,109 @@
         background: #eee;
         margin: 30px 0;
     }
-
-    /* Alert custom */
-    .alert-custom {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        padding: 14px 20px;
-        font-weight: 500;
-        font-size: 14px;
-    }
 </style>
 
 
-<div class="container py-5 job-wrapper">
+<div class="container py-5 worker-wrapper">
 
     <!-- BACK -->
     <a href="javascript:history.back()" class="btn-soft mb-4">
         ← Orqaga
     </a>
 
-    <!-- TITLE -->
+    <!-- PROFILE HEADER -->
     <div class="white-box title-area mb-4">
-        <h2>{{ product.title }}</h2>
-        <span><i class="bi bi-geo-alt-fill"></i> {{ product.location }}</span>
-    </div>
-
-    <!-- COMPANY -->
-    <div class="white-box company-box mb-4">
-        <div class="company-logo">
-            {% if product.employer.logo %}
-            <img src="{{ product.employer.logo.url }}" alt="{{ product.employer.company_name }}">
-            {% else %}
-            {{ product.employer.company_name|first|upper }}
-            {% endif %}
-        </div>
-
-        <div>
-            <h5>{{ product.employer.company_name }}</h5>
-            <a href="#" class="text-decoration-none text-primary">Profil ko'rish →</a>
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="profile-avatar">
+                {{ worker.full_name|first|upper }}
+            </div>
+            <div class="flex-grow-1">
+                <h2 class="mb-1">{{ worker.full_name }}</h2>
+                <span>{{ worker.profession }}</span>
+                {% if worker.status %}
+                <span class="status-badge status-active">✓ Faol</span>
+                {% else %}
+                <span class="status-badge status-inactive">⏸ Faol emas</span>
+                {% endif %}
+            </div>
         </div>
     </div>
 
-    <!-- DESCRIPTION -->
+    <!-- BIO -->
+    {% if worker.bio %}
     <div class="white-box mb-4">
-        <div class="section-title">📋 Ish haqida</div>
+        <div class="section-title">Haqida</div>
         <p style="color:#555; line-height:1.7; font-size:15px;">
-            {{ product.description }}
+            {{ worker.bio }}
         </p>
     </div>
+    {% endif %}
 
     <!-- INFO GRID -->
     <div class="white-box mb-4">
-        <div class="section-title mb-3">📊 Asosiy ma'lumotlar</div>
         <div class="row g-4">
 
-            <div class="col-md-6 col-12">
-                <div class="info-grid-title">💰 Maosh</div>
+            <div class="col-6">
+                <div class="info-grid-title">Kasbi</div>
                 <div class="info-grid-body">
-                    {{ product.salary|default:"Kelishiladi" }}
+                    {{ worker.profession }}
                 </div>
             </div>
 
-            <div class="col-md-6 col-12">
-                <div class="info-grid-title">📂 Kategoriya</div>
-                <div class="info-grid-body">{{ product.category.name }}</div>
+            <div class="col-6">
+                <div class="info-grid-title">Maosh</div>
+                <div class="info-grid-body">
+                    {{ worker.salary|default:"Kelishiladi" }}
+                </div>
             </div>
 
-            <div class="col-md-6 col-12">
-                <div class="info-grid-title">📞 Telefon</div>
+            <div class="col-6">
+                <div class="info-grid-title">Manzil</div>
+                <div class="info-grid-body">{{ worker.location }}</div>
+            </div>
+
+            <div class="col-6">
+                <div class="info-grid-title">Telefon raqam</div>
                 <div class="info-grid-body">
-                    <a href="tel:{{ product.phone_number }}" class="text-decoration-none" style="color: #0d6efd;">
-                        {{ product.phone_number }}
+                    <a href="tel:{{ worker.phone_number }}" class="text-decoration-none" style="color: #0d6efd;">
+                        {{ worker.phone_number }}
                     </a>
                 </div>
             </div>
 
-            <div class="col-md-6 col-12">
-                <div class="info-grid-title">📅 Joylangan sana</div>
-                <div class="info-grid-body">{{ product.created_at|date:"d.m.Y" }}</div>
-            </div>
-
         </div>
-    </div>
-
-    <!-- ALERT -->
-    <div class="alert alert-custom mb-4">
-        ⚠️ Yaqinda ishga tushadi! Qo'shimcha funksiyalar ustida ishlar olib borilmoqda.
     </div>
 
     <!-- ACTIONS -->
     <div class="white-box mb-4 d-flex gap-3 flex-wrap">
-        <a href="tel:{{ product.phone_number }}" class="btn-success-custom">
+        <a href="tel:{{ worker.phone_number }}" class="btn-success-custom">
             📞 Qo'ng'iroq qilish
         </a>
-        <a href="https://wa.me/{{ product.phone_number }}" target="_blank" class="btn-main">
+        <a href="https://wa.me/{{ worker.phone_number }}" target="_blank" class="btn-main">
             💬 WhatsApp
         </a>
-        <button class="btn-soft" onclick="shareJob()" disabled>
+        <button class="btn-soft" onclick="shareWorker()">
             🔗 Ulashish
         </button>
-        <button class="btn-soft" disabled>
-            ❤️ Saqlash
-        </button>
-
+        {% if request.user.is_superuser %}
+        <!-- <a href="{% url 'job:worker-edit' worker.pk %}" class="btn-soft">
+            ✏️ Tahrirlash
+        </a> -->
+        {% endif %}
     </div>
 
 </div>
 
 <script>
-    function shareJob() {
+    function shareWorker() {
         if (navigator.share) {
             navigator.share({
-                title: '{{ product.title }}',
-                text: '{{ product.title }} - {{ product.employer.company_name }}',
+                title: '{{ worker.full_name }} - {{ worker.profession }}',
+                text: '{{ worker.full_name }} - {{ worker.profession }} bo\'yicha mutaxassis',
                 url: window.location.href
             }).catch(err => console.log('Xatolik:', err));
         } else {
+            // Fallback - copy to clipboard
             navigator.clipboard.writeText(window.location.href).then(() => {
                 alert('Havola nusxalandi!');
             });

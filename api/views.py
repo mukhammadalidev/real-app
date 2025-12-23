@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from advertisement.models import Job
+from advertisement.models import Job,Worker
 from .serializers import JobSerializer
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -63,3 +63,5 @@ class UpdateJob(APIView):
             serializer.save()
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
+    
+

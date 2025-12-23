@@ -56,6 +56,8 @@ class AdvertisementModel(models.Model):
 
 
 
+
+
 class Application(models.Model):
     job = models.ForeignKey(Job,on_delete=models.CASCADE)
     applicant = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
@@ -64,3 +66,17 @@ class Application(models.Model):
 
     def __str__(self):
         return f"{self.applicant.username} → {self.job.title}"
+    
+
+
+class Worker(models.Model):
+    full_name = models.CharField(max_length=255,verbose_name='To‘liq ism')
+    profession = models.CharField(max_length=255,verbose_name='Kasbi')
+    bio = models.TextField(verbose_name='Bio')
+    location = models.CharField(max_length=155,verbose_name='Manzil')
+    phone_number = models.CharField(max_length=14,verbose_name='Telefon raqam')
+    status = models.BooleanField(default=False,verbose_name='Holati')
+    salary = models.CharField(max_length=100, blank=True, null=True,verbose_name='Maosh')
+
+    def __str__(self):
+        return self.full_name
