@@ -120,7 +120,7 @@ class CreateWorker(View):
 
 class WorkerView(View):
     def get(self,request):
-        workers = Worker.objects.filter(status=True)
+        workers = Worker.objects.all().order_by('-created_at')
         print(workers)
         return render(request,'ads/worker_list.html',{"workers":workers})
     

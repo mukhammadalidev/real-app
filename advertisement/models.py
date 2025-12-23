@@ -77,6 +77,8 @@ class Worker(models.Model):
     phone_number = models.CharField(max_length=14,verbose_name='Telefon raqam')
     status = models.BooleanField(default=False,verbose_name='Holati')
     salary = models.CharField(max_length=100, blank=True, null=True,verbose_name='Maosh')
+    created_at = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return self.full_name
