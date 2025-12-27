@@ -2,7 +2,7 @@ from django.db import models
 from users.models import CustomUser
 # Create your models here.
 class CategoryModel(models.Model):
-    title = models.CharField(max_length=155)
+    title = models.CharField(max_length=155,verbose_name='Kategorya nomi')
     image = models.URLField(blank=True,null=True)
 
     def __str__(self):

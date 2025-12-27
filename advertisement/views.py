@@ -6,6 +6,8 @@ from .forms import AdsEmployer,ApplicationForm,WorkerForm
 from .serializers import JobSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 class AdvertismentView(View):
     def get(self,request,pk):
         products = Job.objects.filter(category__pk=pk)
@@ -151,3 +153,80 @@ class WorkerEditView(View):
             messages.success(request, "Ishchi e'loni muvaffaqiyatli yangilandi.")
             return redirect('job:worker-detail', pk=worker.pk)
         return render(request, 'ads/edit_worker.html', {"form": form, "worker": worker})
+    
+
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import Job, CategoryModel, EmployerProfile
+from rest_framework.permissions import AllowAny
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from .models import Job, EmployerProfile, CategoryModel
+import re
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ChannelView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        text = request.data.get("text")
+        if not text:
+            return Response({"error": "Text yo‘q"}, status=400)
+
+        # --- DATA EXTRACT ---
+        # Sarlavha
+        title_match = re.search(r"Sarlavha:\s*(.*)", text, re.IGNORECASE)
+        title = title_match.group(1).strip() if title_match else "No Title"
+
+        # Kategoriya
+        category_match = re.search(r"Kategoriya:\s*(.*)", text, re.IGNORECASE)
+        category_name = category_match.group(1).strip() if category_match else ""
+
+        # Manzil
+        location_match = re.search(r"Manzil:\s*(.*)", text, re.IGNORECASE)
+        location = location_match.group(1).strip() if location_match else "No Location"
+
+        # Maosh
+        salary_match = re.search(r"Maosh[:\s]*(.*)", text, re.IGNORECASE)
+        salary = salary_match.group(1).strip() if salary_match else "Kelishiladi"
+
+        # Telefon
+        phone_match = re.search(r"Telefon[:\s]*(.*)", text, re.IGNORECASE)
+        if not phone_match:
+            # Ba’zida boshqa format
+            phone_match = re.search(r"\d{2,4}-\d{2,3}-\d{2,3}", text)
+        phone_number = phone_match.group(0).strip() if phone_match else "No Phone"
+
+        # Tasnif
+        tasnif_match = re.search(r"Tasnif:(.*)", text, re.IGNORECASE | re.DOTALL)
+        description = tasnif_match.group(1).strip() if tasnif_match else text
+
+        # --- CATEGORY ---
+        category = CategoryModel.objects.filter(title__icontains=category_name).first()
+        if not category:
+            category = CategoryModel.objects.first()  # default
+
+        # --- EMPLOYER ---
+        employer = EmployerProfile.objects.first()  # TEST
+
+        # --- CREATE JOB ---
+        job = Job.objects.create(
+            employer=employer,
+            category=category,
+            title=title,
+            location=location,
+            salary=salary,
+            phone_number=phone_number,
+            description=description
+        )
+
+        return Response({"status": "created", "job_id": job.id}, status=201)
+

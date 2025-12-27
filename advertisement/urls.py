@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AdvertismentView,Job_DetailView,AdsEmployerView,ApplicationView,AdvertisementAPIView,AdvertisementDetailAPIView,CreateWorker,WorkerView,WorkerDeleteView,WorkerDetailView,WorkerEditView
+from .views import AdvertismentView,Job_DetailView,AdsEmployerView,ApplicationView,AdvertisementAPIView,AdvertisementDetailAPIView,CreateWorker,WorkerView,WorkerDeleteView,WorkerDetailView,WorkerEditView,ChannelView
 
 app_name = "job"
 urlpatterns = [
@@ -14,6 +14,8 @@ urlpatterns = [
     path('workers/<int:pk>/', WorkerDetailView.as_view(), name='worker-detail'),
     path('workers/delete/<int:pk>/', WorkerDeleteView.as_view(), name='worker-delete'),
     path('workers/edit/<int:pk>/', WorkerEditView.as_view(), name='worker-edit'),
+    path("channel/", ChannelView.as_view()),
+
 
 
 ]
