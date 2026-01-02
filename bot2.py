@@ -3,7 +3,7 @@ import requests
 from aiogram import Bot, Dispatcher, executor, types
 
 API_TOKEN = "8520082855:AAFnQ_MbV17MJhPSTQNVq5tm3pnuXx-xiWo"
-API_URL = "http://localhost:8000/advertisements/channel/"  # o'zingnikiga almashtir
+API_URL = "http://buxoroda-ish.uz/advertisements/channel/"  # o'zingnikiga almashtir
 
 logging.basicConfig(level=logging.INFO)
 
