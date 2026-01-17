@@ -4,6 +4,9 @@ from django.views import View
 from advertisement.models import CategoryModel,Job
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.utils import timezone
+from datetime import timedelta
+
 # Create your views here.
 
 
@@ -37,11 +40,18 @@ def search(request):
 class SearchView(View):
     def get(self, request):
         query = request.GET.get("q", "")
+        date_filter = request.GET.get('date')
 
         jobs = Job.objects.all()
-
+        today = timezone.now().date()
         if query:
             jobs = jobs.filter(title__icontains=query) | jobs.filter(description__icontains=query)
+
+        if date_filter == 'today':
+            jobs = jobs.filter(created_at__date=today)
+
+        elif date_filter == 'yesterday':
+            jobs = jobs.filter(created_at__date=today - timedelta(days=1))
 
         context = {
             "query": query,
