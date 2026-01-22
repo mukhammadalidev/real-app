@@ -53,6 +53,9 @@ class SearchView(View):
         elif date_filter == 'yesterday':
             jobs = jobs.filter(created_at__date=today - timedelta(days=1))
 
+        elif date_filter == 'last_7_days':
+            jobs = jobs.filter(created_at__date__gte=today - timedelta(days=7))
+
         context = {
             "query": query,
             "jobs": jobs
