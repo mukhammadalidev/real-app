@@ -1,271 +1,491 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <style>
-    body {
-        background: #fafafa !important;
-        font-family: 'Inter', sans-serif;
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --light: #f8fafc;
+        --white: #ffffff;
+        --success: #16a34a;
+        --warning-bg: #fff7ed;
+        --warning-text: #c2410c;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        --shadow-lg: 0 20px 55px rgba(15, 23, 42, 0.12);
     }
 
-    .job-wrapper {
-        max-width: 900px;
-        margin: auto;
+    .job-detail-page {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 10px 0 30px;
     }
 
-    /* White Card but with soft edges */
-    .white-box {
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 18px;
+        border-radius: 999px;
         background: #fff;
-        border-radius: 18px;
-        padding: 28px;
-        border: 1px solid #ececec;
-    }
-
-    .title-area h2 {
+        border: 1px solid var(--border);
+        color: var(--secondary);
         font-weight: 700;
-        font-size: 32px;
-        color: #222;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+        transition: 0.25s ease;
+        margin-bottom: 20px;
     }
 
-    .title-area span {
-        color: #6d7b91;
-        font-size: 15px;
+    .back-btn:hover {
+        color: var(--primary);
+        border-color: rgba(37, 99, 235, 0.28);
+        transform: translateY(-2px);
     }
 
-    /* Info groups */
-    .info-grid-title {
-        font-size: 13px;
-        color: #8b8b8b;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        margin-bottom: 4px;
+    .detail-card {
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        border-radius: 28px;
+        padding: 28px;
+        box-shadow: var(--shadow);
+        margin-bottom: 18px;
     }
 
-    .info-grid-body {
-        font-size: 15px;
+    .hero-card {
+        position: relative;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at top right, rgba(96, 165, 250, 0.18), transparent 24%),
+            linear-gradient(135deg, #ffffff, #f8fbff);
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 14px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        margin-bottom: 14px;
+    }
+
+    .job-title {
+        font-size: 38px;
+        font-weight: 800;
+        color: var(--secondary);
+        line-height: 1.2;
+        margin-bottom: 16px;
+        letter-spacing: -0.9px;
+    }
+
+    .job-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .meta-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        color: #334155;
         font-weight: 600;
-        color: #222;
+        font-size: 14px;
     }
 
-    /* Company block */
-    .company-box {
+    .salary-pill {
+        background: rgba(22, 163, 74, 0.10);
+        color: #166534;
+        border-color: rgba(22, 163, 74, 0.12);
+        font-weight: 800;
+    }
+
+    .company-card {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 18px;
     }
 
     .company-logo {
-        width: 65px;
-        height: 65px;
-        border-radius: 14px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        width: 78px;
+        height: 78px;
+        border-radius: 22px;
+        overflow: hidden;
+        flex-shrink: 0;
+        border: 1px solid var(--border);
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
-        font-weight: 700;
-        color: white;
-        border: 2px solid #fff;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        flex-shrink: 0;
+        color: #fff;
+        font-size: 28px;
+        font-weight: 800;
+        box-shadow: 0 14px 24px rgba(37, 99, 235, 0.18);
     }
 
     .company-logo img {
         width: 100%;
         height: 100%;
-        border-radius: 12px;
         object-fit: cover;
     }
 
-    .company-box h5 {
-        margin-bottom: 4px;
-        font-size: 18px;
-        font-weight: 600;
-        color: #222;
+    .company-name {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--secondary);
+        margin-bottom: 6px;
     }
 
-    .company-box a {
+    .company-subtext {
+        color: var(--muted);
         font-size: 14px;
-        font-weight: 500;
+        margin-bottom: 10px;
     }
 
-    /* Soft button */
-    .btn-soft {
-        background: #f3f4f6;
-        border-radius: 9px;
-        padding: 10px 18px;
-        font-size: 14px;
-        border: none;
-        transition: .2s;
+    .company-link {
+        color: var(--primary);
         text-decoration: none;
-        color: #222;
-        display: inline-block;
+        font-weight: 700;
     }
 
-    .btn-soft:hover {
-        background: #e2e4e9;
-        color: #222;
-    }
-
-    .btn-main {
-        background: #0d6efd;
-        color: white;
-        border-radius: 10px;
-        padding: 11px 22px;
-        font-weight: 600;
-        border: none;
-        transition: .2s;
-        text-decoration: none;
-        display: inline-block;
-    }
-
-    .btn-main:hover {
-        background: #0b5ed7;
-        color: white;
-    }
-
-    .btn-success-custom {
-        background: #198754;
-        color: white;
-        border-radius: 10px;
-        padding: 11px 22px;
-        font-weight: 600;
-        border: none;
-        transition: .2s;
-    }
-
-    .btn-success-custom:hover {
-        background: #157347;
+    .company-link:hover {
+        color: var(--primary-dark);
     }
 
     .section-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--secondary);
+        margin-bottom: 16px;
+        letter-spacing: -0.3px;
+    }
+
+    .description-text {
+        color: #475569;
+        line-height: 1.85;
+        font-size: 15px;
+        margin-bottom: 0;
+        white-space: pre-line;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .info-item {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        padding: 20px;
+        min-height: 110px;
+    }
+
+    .info-label {
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
         font-weight: 700;
-        font-size: 20px;
-        margin-bottom: 15px;
-        color: #222;
+        margin-bottom: 8px;
     }
 
-    /* spacing */
-    .line {
-        height: 1px;
-        background: #eee;
-        margin: 30px 0;
+    .info-value {
+        color: var(--secondary);
+        font-size: 17px;
+        font-weight: 800;
+        line-height: 1.5;
+        word-break: break-word;
     }
 
-    /* Alert custom */
-    .alert-custom {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
+    .info-value a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+
+    .info-value a:hover {
+        color: var(--primary-dark);
+    }
+
+    .notice-box {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        background: var(--warning-bg);
+        border: 1px solid #fed7aa;
+        border-radius: 22px;
+        padding: 18px 20px;
+        color: var(--warning-text);
+        font-weight: 600;
+        box-shadow: 0 8px 22px rgba(251, 146, 60, 0.08);
+    }
+
+    .notice-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        border-radius: 14px;
+        background: rgba(251, 146, 60, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .action-card {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 13px 22px;
+        border-radius: 16px;
+        font-weight: 700;
+        text-decoration: none;
         border: none;
-        border-radius: 12px;
-        padding: 14px 20px;
-        font-weight: 500;
-        font-size: 14px;
+        transition: 0.25s ease;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn-call {
+        background: linear-gradient(135deg, #16a34a, #22c55e);
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(34, 197, 94, 0.18);
+    }
+
+    .btn-call:hover {
+        color: #fff;
+    }
+
+    .btn-whatsapp {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.16);
+    }
+
+    .btn-whatsapp:hover {
+        color: #fff;
+    }
+
+    .btn-soft {
+        background: #fff;
+        color: var(--secondary);
+        border: 1px solid var(--border);
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+    }
+
+    .btn-soft:hover {
+        color: var(--primary);
+        border-color: rgba(37, 99, 235, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        .job-title {
+            font-size: 30px;
+        }
+
+        .company-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .action-card {
+            flex-direction: column;
+        }
+
+        .action-btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .detail-card {
+            border-radius: 22px;
+            padding: 20px;
+        }
+
+        .job-title {
+            font-size: 26px;
+        }
+
+        .meta-pill {
+            width: 100%;
+            justify-content: flex-start;
+        }
     }
 </style>
 
+<div class="container py-5">
+    <div class="job-detail-page">
 
-<div class="container py-5 job-wrapper">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i>
+            Orqaga
+        </a>
 
-    <!-- BACK -->
-    <a href="javascript:history.back()" class="btn-soft mb-4">
-        ← Orqaga
-    </a>
+        <!-- HERO -->
+        <div class="detail-card hero-card">
+            <div class="hero-badge">
+                <i class="fa-solid fa-briefcase"></i>
+                Vakansiya tafsiloti
+            </div>
 
-    <!-- TITLE -->
-    <div class="white-box title-area mb-4">
-        <h2>{{ product.title }}</h2>
-        <span><i class="bi bi-geo-alt-fill"></i> {{ product.location }}</span>
-    </div>
+            <h1 class="job-title">{{ product.title }}</h1>
 
-    <!-- COMPANY -->
-    <div class="white-box company-box mb-4">
-        <div class="company-logo">
-            {% if product.employer.logo %}
-            <img src="{{ product.employer.logo.url }}" alt="{{ product.employer.company_name }}">
-            {% else %}
-            {{ product.employer.company_name|first|upper }}
-            {% endif %}
-        </div>
+            <div class="job-meta-row">
+                <div class="meta-pill">
+                    <i class="fa-solid fa-location-dot"></i>
+                    {{ product.location }}
+                </div>
 
-        <div>
-            <h5>{{ product.employer.company_name }}</h5>
-            <a href="#" class="text-decoration-none text-primary">Profil ko'rish →</a>
-        </div>
-    </div>
-
-    <!-- DESCRIPTION -->
-    <div class="white-box mb-4">
-        <div class="section-title">📋 Ish haqida</div>
-        <p style="color:#555; line-height:1.7; font-size:15px;">
-            {{ product.description }}
-        </p>
-    </div>
-
-    <!-- INFO GRID -->
-    <div class="white-box mb-4">
-        <div class="section-title mb-3">📊 Asosiy ma'lumotlar</div>
-        <div class="row g-4">
-
-            <div class="col-md-6 col-12">
-                <div class="info-grid-title">💰 Maosh</div>
-                <div class="info-grid-body">
+                <div class="meta-pill salary-pill">
+                    <i class="fa-solid fa-wallet"></i>
                     {{ product.salary|default:"Kelishiladi" }}
                 </div>
-            </div>
 
-            <div class="col-md-6 col-12">
-                <div class="info-grid-title">📂 Kategoriya</div>
-                <div class="info-grid-body">{{ product.category.name }}</div>
+                <div class="meta-pill">
+                    <i class="fa-regular fa-calendar"></i>
+                    {{ product.created_at|date:"d.m.Y" }}
+                </div>
             </div>
+        </div>
 
-            <div class="col-md-6 col-12">
-                <div class="info-grid-title">📞 Telefon</div>
-                <div class="info-grid-body">
-                    <a href="tel:{{ product.phone_number }}" class="text-decoration-none" style="color: #0d6efd;">
-                        {{ product.phone_number }}
+        <!-- COMPANY -->
+        <div class="detail-card">
+            <div class="company-card">
+                <div class="company-logo">
+                    {% if product.employer.logo %}
+                    <img src="{{ product.employer.logo.url }}" alt="{{ product.employer.company_name }}">
+                    {% else %}
+                    {{ product.employer.company_name|first|upper }}
+                    {% endif %}
+                </div>
+
+                <div>
+                    <div class="company-name">{{ product.employer.company_name }}</div>
+                    <div class="company-subtext">
+                        Ish beruvchi haqida asosiy ma’lumot
+                    </div>
+                    <a href="#" class="company-link">
+                        Profil ko‘rish <i class="fa-solid fa-arrow-right ms-1"></i>
                     </a>
                 </div>
             </div>
-
-            <div class="col-md-6 col-12">
-                <div class="info-grid-title">📅 Joylangan sana</div>
-                <div class="info-grid-body">{{ product.created_at|date:"d.m.Y" }}</div>
-            </div>
-
         </div>
+
+        <!-- DESCRIPTION -->
+        <div class="detail-card">
+            <h3 class="section-title">Ish haqida</h3>
+            <p class="description-text">{{ product.description }}</p>
+        </div>
+
+        <!-- INFO -->
+        <div class="detail-card">
+            <h3 class="section-title">Asosiy ma’lumotlar</h3>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Maosh</div>
+                    <div class="info-value">
+                        {{ product.salary|default:"Kelishiladi" }}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Kategoriya</div>
+                    <div class="info-value">
+                        {{ product.category.name }}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Telefon</div>
+                    <div class="info-value">
+                        <a href="tel:{{ product.phone_number }}">
+                            {{ product.phone_number }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Joylangan sana</div>
+                    <div class="info-value">
+                        {{ product.created_at|date:"d.m.Y" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOTICE -->
+        <div class="notice-box mb-4">
+            <div class="notice-icon">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <div>
+                Qo‘shimcha funksiyalar va yanada qulay murojaat imkoniyatlari tez orada platformaga qo‘shiladi.
+            </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="detail-card">
+            <h3 class="section-title">Bog‘lanish</h3>
+
+            <div class="action-card">
+                <a href="tel:{{ product.phone_number }}" class="action-btn btn-call">
+                    <i class="fa-solid fa-phone"></i>
+                    Qo‘ng‘iroq qilish
+                </a>
+
+                <a href="https://wa.me/{{ product.phone_number }}" target="_blank" class="action-btn btn-whatsapp">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    WhatsApp
+                </a>
+
+                <button class="action-btn btn-soft" onclick="shareJob()">
+                    <i class="fa-solid fa-share-nodes"></i>
+                    Ulashish
+                </button>
+
+                <button class="action-btn btn-soft" disabled>
+                    <i class="fa-regular fa-heart"></i>
+                    Saqlash
+                </button>
+            </div>
+        </div>
+
     </div>
-
-    <!-- ALERT -->
-    <div class="alert alert-custom mb-4">
-        ⚠️ Yaqinda ishga tushadi! Qo'shimcha funksiyalar ustida ishlar olib borilmoqda.
-    </div>
-
-    <!-- ACTIONS -->
-    <div class="white-box mb-4 d-flex gap-3 flex-wrap">
-        <a href="tel:{{ product.phone_number }}" class="btn-success-custom">
-            📞 Qo'ng'iroq qilish
-        </a>
-        <a href="https://wa.me/{{ product.phone_number }}" target="_blank" class="btn-main">
-            💬 WhatsApp
-        </a>
-        <button class="btn-soft" onclick="shareJob()" disabled>
-            🔗 Ulashish
-        </button>
-        <button class="btn-soft" disabled>
-            ❤️ Saqlash
-        </button>
-
-    </div>
-
 </div>
 
 <script>
     function shareJob() {
         if (navigator.share) {
             navigator.share({
-                title: '{{ product.title }}',
-                text: '{{ product.title }} - {{ product.employer.company_name }}',
+                title: '{{ product.title|escapejs }}',
+                text: '{{ product.title|escapejs }} - {{ product.employer.company_name|escapejs }}',
                 url: window.location.href
             }).catch(err => console.log('Xatolik:', err));
         } else {
@@ -275,5 +495,4 @@
         }
     }
 </script>
-
 {% endblock %}

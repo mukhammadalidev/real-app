@@ -1,39 +1,232 @@
+
+Shu backtick sabab template buziladi.
+
+Yana dizayn ham oldingi sahifalarga nisbatan oddiy. Men buni ham **premium, serious, clean worker form page** qilib tayyorlab berdim.
+
+To‘liq shu kodni qo‘ying:
+
+```html
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}E'lon Qo'shish{% endblock %}
+{% block title %}Ishchi sifatida e'lon qo'shish{% endblock %}
 
 {% block content %}
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --light: #f8fafc;
+        --white: #ffffff;
+        --success: #16a34a;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        --shadow-lg: 0 20px 55px rgba(15, 23, 42, 0.12);
+    }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card p-4 border-0 rounded-4">
-                <div class="card-header bg-primary text-light rounded-3 mb-4">
-                    <h4 class="mb-0"><i class="fa fa-plus-circle me-2"></i>Ishchi Sifatida E'lon Qo'shish</h4>
+    .worker-form-page {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 10px 0 30px;
+    }
+
+    .worker-form-card {
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        border-radius: 30px;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+    }
+
+    .worker-form-header {
+        background:
+            radial-gradient(circle at top right, rgba(96, 165, 250, 0.22), transparent 25%),
+            linear-gradient(135deg, #0f172a, #1d4ed8 70%);
+        color: #fff;
+        padding: 28px 30px;
+    }
+
+    .worker-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        margin-bottom: 14px;
+    }
+
+    .worker-form-title {
+        font-size: 30px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        letter-spacing: -0.5px;
+    }
+
+    .worker-form-subtitle {
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 15px;
+        margin: 0;
+    }
+
+    .worker-form-body {
+        padding: 30px;
+        background: linear-gradient(to bottom, #ffffff, #fbfdff);
+    }
+
+    .worker-note {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 16px 18px;
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    .worker-note i {
+        color: var(--primary);
+        margin-right: 8px;
+    }
+
+    .worker-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 26px;
+    }
+
+    .worker-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 13px 24px;
+        border-radius: 16px;
+        font-weight: 700;
+        text-decoration: none;
+        border: none;
+        transition: 0.25s ease;
+    }
+
+    .worker-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .worker-btn-save {
+        background: linear-gradient(135deg, #16a34a, #22c55e);
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(34, 197, 94, 0.18);
+    }
+
+    .worker-btn-save:hover {
+        color: #fff;
+    }
+
+    .worker-btn-cancel {
+        background: #fff;
+        color: var(--secondary);
+        border: 1px solid var(--border);
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+    }
+
+    .worker-btn-cancel:hover {
+        color: var(--primary);
+        border-color: rgba(37, 99, 235, 0.3);
+    }
+
+    .worker-form-card input,
+    .worker-form-card select,
+    .worker-form-card textarea {
+        border-radius: 16px !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: none !important;
+        padding: 12px 14px !important;
+    }
+
+    .worker-form-card input:focus,
+    .worker-form-card select:focus,
+    .worker-form-card textarea:focus {
+        border-color: rgba(37, 99, 235, 0.45) !important;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08) !important;
+    }
+
+    .worker-form-card label {
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 8px;
+    }
+
+    .worker-form-card .helptext,
+    .worker-form-card .form-text,
+    .worker-form-card small {
+        color: var(--muted) !important;
+        font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+        .worker-form-header,
+        .worker-form-body {
+            padding: 22px;
+        }
+
+        .worker-form-title {
+            font-size: 24px;
+        }
+
+        .worker-actions {
+            flex-direction: column;
+        }
+
+        .worker-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container py-5">
+    <div class="worker-form-page">
+        <div class="worker-form-card">
+            <div class="worker-form-header">
+                <div class="worker-badge">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Ishchi e'loni
+                </div>
+                <h1 class="worker-form-title">Ishchi sifatida e'lon qo'shish</h1>
+                <p class="worker-form-subtitle">
+                    O‘zingiz haqingizdagi ma’lumotlarni kiriting va ish beruvchilarga ko‘rinadigan e’lon yarating.
+                </p>
+            </div>
+
+            <div class="worker-form-body">
+                <div class="worker-note">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Ma’lumotlaringizni aniq kiriting. Bu sizning profilingizni yanada ishonchli va professional ko‘rsatadi.
                 </div>
 
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
 
-                <div class="card-body">
-                    <form method="POST">
-                        {% csrf_token %}
-                        {{ form|crispy }}
+                    <div class="worker-actions">
+                        <button type="submit" class="worker-btn worker-btn-save">
+                            <i class="fa-solid fa-check"></i>
+                            Saqlash
+                        </button>
 
-                        <div class="mt-3 d-flex">
-                            <button type="submit" class="btn btn-success btn-lg shadow-sm me-2">
-                                <i class="fa fa-check-circle me-1"></i> Saqlash
-                            </button>
-                            <a href="/" class="btn btn-secondary btn-lg shadow-sm">
-                                <i class="fa fa-times-circle me-1"></i> Bekor qilish
-                            </a>
-                        </div>
-                    </form>
-                </div>
-
+                        <a href="/" class="worker-btn worker-btn-cancel">
+                            <i class="fa-solid fa-xmark"></i>
+                            Bekor qilish
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    ```
-
 </div>
 {% endblock %}

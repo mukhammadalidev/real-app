@@ -1,25 +1,241 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+
+{% block title %}Kirish{% endblock %}
+
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="col-md-4">
-        <div class="card p-4 shadow-sm">
-            <h3 class="text-center mb-3">Login</h3>
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --light: #f8fafc;
+        --white: #ffffff;
+        --danger-bg: #fef2f2;
+        --danger-border: #fecaca;
+        --danger-text: #b91c1c;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        --shadow-lg: 0 20px 55px rgba(15, 23, 42, 0.12);
+    }
 
-            {% if messages %}
-                {% for msg in messages %}
-                    <div class="alert alert-danger">{{ msg }}</div>
-                {% endfor %}
-            {% endif %}
+    .login-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 0;
+    }
 
-            <form method="post">
-                {% csrf_token %}
-                {{ form|crispy }}
+    .login-card {
+        width: 100%;
+        max-width: 470px;
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
 
-                <button class="btn btn-primary w-100 mt-3">Kirish</button>
-                <br><br>
-                <a href="{% url 'users:register' %}">Ro'yxatdan o'tish uchun linkni bos</a>
-            </form>
+    .login-header {
+        background:
+            radial-gradient(circle at top right, rgba(96, 165, 250, 0.22), transparent 25%),
+            linear-gradient(135deg, #0f172a, #1d4ed8 70%);
+        color: #fff;
+        padding: 30px 28px;
+        text-align: center;
+    }
+
+    .login-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        margin-bottom: 14px;
+    }
+
+    .login-title {
+        font-size: 30px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        letter-spacing: -0.4px;
+    }
+
+    .login-subtitle {
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 15px;
+        margin: 0;
+    }
+
+    .login-body {
+        padding: 30px 28px;
+        background: linear-gradient(to bottom, #ffffff, #fbfdff);
+    }
+
+    .message-box {
+        background: var(--danger-bg);
+        border: 1px solid var(--danger-border);
+        color: var(--danger-text);
+        border-radius: 16px;
+        padding: 12px 14px;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 14px;
+    }
+
+    .login-note {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 14px 16px;
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 22px;
+    }
+
+    .login-note i {
+        color: var(--primary);
+        margin-right: 8px;
+    }
+
+    .login-btn {
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: linear-gradient(135deg, var(--primary), #3b82f6);
+        color: #fff;
+        border: none;
+        border-radius: 16px;
+        padding: 14px 20px;
+        font-weight: 700;
+        margin-top: 8px;
+        transition: 0.25s ease;
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+    }
+
+    .login-btn:hover {
+        transform: translateY(-2px);
+        color: #fff;
+    }
+
+    .register-box {
+        text-align: center;
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .register-link {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .register-link:hover {
+        color: var(--primary-dark);
+    }
+
+    /* crispy form styling */
+    .login-card input,
+    .login-card select,
+    .login-card textarea {
+        border-radius: 16px !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: none !important;
+        padding: 12px 14px !important;
+    }
+
+    .login-card input:focus,
+    .login-card select:focus,
+    .login-card textarea:focus {
+        border-color: rgba(37, 99, 235, 0.45) !important;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08) !important;
+    }
+
+    .login-card label {
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 8px;
+    }
+
+    .login-card .helptext,
+    .login-card .form-text,
+    .login-card small {
+        color: var(--muted) !important;
+        font-size: 13px;
+    }
+
+    @media (max-width: 576px) {
+        .login-header,
+        .login-body {
+            padding: 22px 18px;
+        }
+
+        .login-title {
+            font-size: 25px;
+        }
+
+        .login-card {
+            border-radius: 22px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="login-page">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-badge">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Tizimga kirish
+                </div>
+                <h1 class="login-title">Hisobingizga kiring</h1>
+                <p class="login-subtitle">
+                    Profilingizga kirib, vakansiyalar va e’lonlarni boshqaring.
+                </p>
+            </div>
+
+            <div class="login-body">
+                {% if messages %}
+                    {% for msg in messages %}
+                        <div class="message-box">
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="login-note">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Login ma’lumotlaringizni kiriting va tizimga xavfsiz tarzda kiring.
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+                    <button type="submit" class="login-btn">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        Kirish
+                    </button>
+                </form>
+
+                <div class="register-box">
+                    Hisobingiz yo‘qmi?
+                    <a href="{% url 'users:register' %}" class="register-link">
+                        Ro‘yxatdan o‘tish
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

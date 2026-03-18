@@ -1,125 +1,434 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="fw-bold">Ishchilar ro'yxati</h2>
-            <p class="text-muted">Jami: {{ workers.count }} ta ishchi</p>
-        </div>
-    </div>
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --light: #f8fafc;
+        --white: #ffffff;
+        --success-bg: #dcfce7;
+        --success-text: #166534;
+        --warning-bg: #fef3c7;
+        --warning-text: #92400e;
+        --danger: #dc2626;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        --shadow-lg: 0 20px 55px rgba(15, 23, 42, 0.12);
+    }
 
-    <!-- Search Bar (faollashtirish uchun izohdan chiqaring) -->
-    <!-- <div class="row mb-4">
-        <div class="col-12">
-            <form method="GET" action="{% url 'search' %}">
-                <div class="input-group input-group-lg">
-                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-                    <input type="text" class="form-control border-start-0"
-                        placeholder="Ism, kasb yoki joy bo'yicha qidirish..." name="q" value="{{ query }}">
-                    <button class="btn btn-primary px-4" type="submit">Qidirish</button>
-                </div>
-            </form>
-        </div>
-    </div> -->
+    .workers-page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 10px 0 30px;
+    }
 
-    <!-- Worker Cards -->
-    <div class="row">
+    .workers-hero {
+        background:
+            radial-gradient(circle at top right, rgba(96, 165, 250, 0.22), transparent 25%),
+            linear-gradient(135deg, #0f172a, #1d4ed8 70%);
+        color: #fff;
+        border-radius: 30px;
+        padding: 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 22px 50px rgba(37, 99, 235, 0.24);
+    }
+
+    .workers-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        margin-bottom: 14px;
+    }
+
+    .workers-title {
+        font-size: 36px;
+        font-weight: 800;
+        margin-bottom: 10px;
+        letter-spacing: -0.8px;
+    }
+
+    .workers-subtitle {
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 15px;
+        margin-bottom: 18px;
+    }
+
+    .workers-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .worker-card {
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        border-radius: 28px;
+        padding: 26px;
+        margin-bottom: 18px;
+        box-shadow: var(--shadow);
+        transition: 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .worker-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, transparent, rgba(37, 99, 235, 0.05), transparent);
+        opacity: 0;
+        transition: 0.3s ease;
+        pointer-events: none;
+    }
+
+    .worker-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+        border-color: rgba(37, 99, 235, 0.25);
+    }
+
+    .worker-card:hover::before {
+        opacity: 1;
+    }
+
+    .worker-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 18px;
+        margin-bottom: 18px;
+    }
+
+    .worker-name {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--secondary);
+        line-height: 1.35;
+        margin-bottom: 8px;
+    }
+
+    .worker-profession {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 14px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .status-active {
+        background: var(--success-bg);
+        color: var(--success-text);
+        border: 1px solid rgba(22, 163, 74, 0.1);
+    }
+
+    .status-inactive {
+        background: var(--warning-bg);
+        color: var(--warning-text);
+        border: 1px solid rgba(245, 158, 11, 0.12);
+    }
+
+    .worker-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .meta-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        color: #334155;
+        padding: 10px 14px;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .meta-pill a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .worker-bio {
+        color: #475569;
+        font-size: 15px;
+        line-height: 1.75;
+        margin-bottom: 18px;
+    }
+
+    .worker-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        flex-wrap: wrap;
+    }
+
+    .salary-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--primary);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .worker-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn-worker-view {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: linear-gradient(135deg, var(--primary), #3b82f6);
+        color: #fff;
+        border-radius: 16px;
+        padding: 12px 18px;
+        font-weight: 700;
+        text-decoration: none;
+        border: none;
+        transition: 0.25s ease;
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn-worker-view:hover {
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+    .btn-worker-delete {
+        background: #fff;
+        color: var(--danger);
+        border: 1.5px solid #fecaca;
+        border-radius: 16px;
+        padding: 11px 16px;
+        font-weight: 700;
+        transition: 0.25s ease;
+    }
+
+    .btn-worker-delete:hover {
+        background: var(--danger);
+        color: #fff;
+        border-color: var(--danger);
+    }
+
+    .empty-state {
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px dashed #cbd5e1;
+        border-radius: 28px;
+        padding: 70px 24px;
+        text-align: center;
+        box-shadow: var(--shadow);
+    }
+
+    .empty-icon {
+        width: 90px;
+        height: 90px;
+        margin: 0 auto 20px;
+        border-radius: 24px;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+    }
+
+    .empty-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--secondary);
+        margin-bottom: 10px;
+    }
+
+    .empty-text {
+        color: var(--muted);
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+        .worker-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .worker-footer {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .worker-actions {
+            width: 100%;
+        }
+
+        .btn-worker-view,
+        .btn-worker-delete {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .workers-hero,
+        .worker-card,
+        .empty-state {
+            border-radius: 22px;
+        }
+
+        .workers-title {
+            font-size: 28px;
+        }
+
+        .worker-name {
+            font-size: 20px;
+        }
+    }
+</style>
+
+<div class="container py-5">
+    <div class="workers-page">
+
+        <div class="workers-hero">
+            <div class="workers-badge">
+                <i class="fa-solid fa-users"></i>
+                Ishchilar bazasi
+            </div>
+
+            <h1 class="workers-title">Ishchilar ro‘yxati</h1>
+            <p class="workers-subtitle">
+                Turli yo‘nalishdagi ish izlovchilar profillarini ko‘rib chiqing va mos nomzodni toping.
+            </p>
+
+            <div class="workers-count">
+                <i class="fa-solid fa-layer-group"></i>
+                Jami: {{ workers.count }} ta ishchi
+            </div>
+        </div>
+
         {% for worker in workers %}
-        <div class="col-lg-12 col-12 mb-4">
-            <div class="card h-100 border-0 shadow-sm hover-shadow transition">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="card-title fw-bold mb-2">
-                                {{ worker.full_name|default:"Ism mavjud emas"|truncatewords:10 }}
-                            </h5>
-                            <p class="text-primary mb-0">
-                                <i class="bi bi-briefcase-fill me-2"></i>{{ worker.profession }}
-                            </p>
-                        </div>
-                        {% if worker.status %}
-                        <span class="badge bg-success-subtle text-success border border-success">
-                            <i class="bi bi-check-circle-fill me-1"></i>Faol
-                        </span>
-                        {% else %}
-                        <span class="badge bg-warning-subtle text-warning border border-warning">
-                            <i class="bi bi-clock-fill me-1"></i>Faol emas
-                        </span>
-                        {% endif %}
-                    </div>
+        <div class="worker-card">
+            <div class="worker-header">
+                <div>
+                    <h2 class="worker-name">
+                        {{ worker.full_name|default:"Ism mavjud emas"|truncatewords:10 }}
+                    </h2>
 
-                    <div class="mb-3">
-                        <p class="mb-2 text-muted">
-                            <i class="bi bi-telephone-fill me-2 text-primary"></i>
-                            <a href="tel:{{ worker.phone_number }}" class="text-decoration-none text-dark">
-                                {{ worker.phone_number }}
-                            </a>
-                        </p>
-                        <p class="mb-2 text-muted">
-                            <i class="bi bi-geo-alt-fill me-2 text-danger"></i>{{ worker.location }}
-                        </p>
+                    <div class="worker-profession">
+                        <i class="fa-solid fa-briefcase"></i>
+                        {{ worker.profession }}
                     </div>
+                </div>
 
-                    {% if worker.bio %}
-                    <p class="text-muted small mb-3">
-                        {{ worker.bio|truncatewords:20 }}
-                    </p>
+                {% if worker.status %}
+                <div class="status-badge status-active">
+                    <i class="fa-solid fa-circle-check"></i>
+                    Faol
+                </div>
+                {% else %}
+                <div class="status-badge status-inactive">
+                    <i class="fa-solid fa-clock"></i>
+                    Faol emas
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="worker-meta">
+                <div class="meta-pill">
+                    <i class="fa-solid fa-phone"></i>
+                    <a href="tel:{{ worker.phone_number }}">{{ worker.phone_number }}</a>
+                </div>
+
+                <div class="meta-pill">
+                    <i class="fa-solid fa-location-dot"></i>
+                    {{ worker.location }}
+                </div>
+            </div>
+
+            {% if worker.bio %}
+            <p class="worker-bio">
+                {{ worker.bio|truncatewords:22 }}
+            </p>
+            {% endif %}
+
+            <div class="worker-footer">
+                <div class="salary-pill">
+                    <i class="fa-solid fa-wallet"></i>
+                    {{ worker.salary|default:"Kelishiladi" }}
+                </div>
+
+                <div class="worker-actions">
+                    <a href="{% url 'job:worker-detail' worker.pk %}" class="btn-worker-view">
+                        <i class="fa-solid fa-eye"></i>
+                        Batafsil
+                    </a>
+
+                    {% if request.user.is_superuser %}
+                    <form method="post" action="{% url 'job:worker-delete' worker.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="btn-worker-delete"
+                                onclick="return confirm('Rostdan ham o‘chirmoqchimisiz?');">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </form>
                     {% endif %}
-
-                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-                        <div>
-                            <span class="badge bg-primary-subtle text-primary fs-6 px-3 py-2">
-                                <i class="bi bi-cash-stack me-1"></i>{{ worker.salary|default:"Kelishiladi" }}
-                            </span>
-                        </div>
-                        <div>
-                            <a href="{% url 'job:worker-detail' worker.pk %}"
-                                class="btn btn-outline-primary btn-sm px-3">
-                                <i class="bi bi-eye me-1"></i>Batafsil
-                            </a>
-                            {% if request.user.is_superuser %}
-                            <!-- <a href="{% url 'job:worker-edit' worker.pk %}" class="btn btn-outline-secondary btn-sm">
-                                <i class="bi bi-pencil"></i>
-                            </a> -->
-                            <form method="post" action="{% url 'job:worker-delete' worker.pk %}"
-                                style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-outline-danger btn-sm"
-                                    onclick="return confirm('Rostdan ham o\'chirmoqchimisiz?');">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
-                            {% endif %}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
         {% empty %}
-        <div class="col-12">
-            <div class="text-center py-5">
-                <i class="bi bi-inbox display-1 text-muted"></i>
-                <h4 class="mt-3 text-muted">Hech qanday ishchi topilmadi</h4>
-                <p class="text-muted">Hozircha ro'yxat bo'sh</p>
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fa-solid fa-inbox"></i>
             </div>
+            <h3 class="empty-title">Hech qanday ishchi topilmadi</h3>
+            <p class="empty-text">
+                Hozircha ishchilar ro‘yxati bo‘sh.
+            </p>
         </div>
         {% endfor %}
+
     </div>
 </div>
-
-<style>
-    .hover-shadow {
-        transition: all 0.3s ease;
-    }
-
-    .hover-shadow:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .transition {
-        transition: all 0.3s ease;
-    }
-</style>
 {% endblock %}

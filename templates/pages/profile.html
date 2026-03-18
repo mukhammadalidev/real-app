@@ -1,67 +1,278 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block content %}
+{% block title %}Profil{% endblock %}
 
+{% block content %}
 <style>
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --light: #f8fafc;
+        --white: #ffffff;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        --shadow-lg: 0 20px 55px rgba(15, 23, 42, 0.12);
+    }
+
+    .profile-page {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 10px 0 30px;
+    }
+
     .profile-card {
-        border-radius: 20px;
-        background: #ffffff;
-        padding: 30px;
-        border: none;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .profile-header {
+        background:
+            radial-gradient(circle at top right, rgba(96, 165, 250, 0.22), transparent 25%),
+            linear-gradient(135deg, #0f172a, #1d4ed8 70%);
+        color: #fff;
+        padding: 34px 30px;
+        text-align: center;
+    }
+
+    .profile-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        margin-bottom: 16px;
+    }
+
+    .profile-avatar-wrap {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 18px;
     }
 
     .profile-avatar {
-        width: 110px;
-        height: 110px;
+        width: 116px;
+        height: 116px;
         border-radius: 50%;
         object-fit: cover;
-        border: 3px solid #0d6efd;
+        border: 4px solid rgba(255, 255, 255, 0.85);
+        box-shadow: 0 18px 35px rgba(15, 23, 42, 0.22);
+        background: #fff;
     }
 
-    .profile-header h3 {
+    .profile-name {
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        letter-spacing: -0.5px;
+    }
+
+    .profile-email {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 15px;
+        margin-bottom: 14px;
+    }
+
+    .profile-role {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        color: #fff;
+        padding: 9px 14px;
+        border-radius: 999px;
         font-weight: 700;
-        margin-top: 15px;
+        font-size: 14px;
     }
 
-    .profile-header p {
-        margin-bottom: 0;
+    .profile-body {
+        padding: 30px;
+        background: linear-gradient(to bottom, #ffffff, #fbfdff);
     }
 
-    .btn-save {
-        border-radius: 10px;
-        padding: 12px;
-        font-size: 17px;
-        font-weight: 600;
+    .profile-note {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 16px 18px;
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 24px;
     }
 
-    .profile-container {
-        margin-top: 60px;
+    .profile-note i {
+        color: var(--primary);
+        margin-right: 8px;
+    }
+
+    .section-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--secondary);
+        margin-bottom: 18px;
+        letter-spacing: -0.3px;
+    }
+
+    .profile-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 26px;
+    }
+
+    .profile-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 13px 24px;
+        border-radius: 16px;
+        font-weight: 700;
+        text-decoration: none;
+        border: none;
+        transition: 0.25s ease;
+    }
+
+    .profile-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .profile-btn-save {
+        background: linear-gradient(135deg, var(--primary), #3b82f6);
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+    }
+
+    .profile-btn-save:hover {
+        color: #fff;
+    }
+
+    .profile-btn-cancel {
+        background: #fff;
+        color: var(--secondary);
+        border: 1px solid var(--border);
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+    }
+
+    .profile-btn-cancel:hover {
+        color: var(--primary);
+        border-color: rgba(37, 99, 235, 0.3);
+    }
+
+    /* crispy form styling */
+    .profile-card input,
+    .profile-card select,
+    .profile-card textarea {
+        border-radius: 16px !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: none !important;
+        padding: 12px 14px !important;
+    }
+
+    .profile-card input:focus,
+    .profile-card select:focus,
+    .profile-card textarea:focus {
+        border-color: rgba(37, 99, 235, 0.45) !important;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08) !important;
+    }
+
+    .profile-card label {
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 8px;
+    }
+
+    .profile-card .helptext,
+    .profile-card .form-text,
+    .profile-card small {
+        color: var(--muted) !important;
+        font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+        .profile-header,
+        .profile-body {
+            padding: 22px;
+        }
+
+        .profile-name {
+            font-size: 25px;
+        }
+
+        .profile-actions {
+            flex-direction: column;
+        }
+
+        .profile-btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .profile-card {
+            border-radius: 22px;
+        }
+
+        .profile-avatar {
+            width: 98px;
+            height: 98px;
+        }
     }
 </style>
 
-<div class="container profile-container">
-    <div class="row justify-content-center">
-        <div class="col-md-7">
+<div class="container py-5">
+    <div class="profile-page">
+        <div class="profile-card">
 
-            <div class="profile-card">
-
-                <!-- Profil header -->
-                <div class="text-center profile-header">
-
-                    <!-- Avatar -->
-                    <img src="https://via.placeholder.com/110" class="profile-avatar mb-3">
-
-                    <h3>{{ user.first_name }} {{ user.last_name }}</h3>
-                    <p class="text-muted">{{ user.email }}</p>
+            <div class="profile-header">
+                <div class="profile-badge">
+                    <i class="fa-solid fa-user"></i>
+                    Foydalanuvchi profili
                 </div>
 
-                <hr class="my-4">
+                <div class="profile-avatar-wrap">
+                    <img
+                        src="https://via.placeholder.com/110"
+                        alt="{{ user.first_name }} {{ user.last_name }}"
+                        class="profile-avatar"
+                    >
+                </div>
 
-                <!-- Forma -->
+                <h1 class="profile-name">
+                    {{ user.first_name }} {{ user.last_name }}
+                </h1>
+
+                <p class="profile-email">
+                    {{ user.email }}
+                </p>
+
+                <div class="profile-role">
+                    <i class="fa-solid fa-id-badge"></i>
+                    {{ user.user_roles|default:"Foydalanuvchi" }}
+                </div>
+            </div>
+
+            <div class="profile-body">
+                <div class="profile-note">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Profil ma’lumotlaringizni yangilang. To‘liq va aniq profil sizning platformadagi ishonchliligingizni oshiradi.
+                </div>
+
+                <h3 class="section-title">Shaxsiy ma’lumotlar</h3>
+
                 <form method="POST">
                     {% csrf_token %}
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             {{ form.username|as_crispy_field }}
@@ -84,15 +295,21 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 btn-save">
-                        Profilni Yangilash
-                    </button>
-                </form>
+                    <div class="profile-actions">
+                        <button type="submit" class="profile-btn profile-btn-save">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Profilni yangilash
+                        </button>
 
+                        <a href="/" class="profile-btn profile-btn-cancel">
+                            <i class="fa-solid fa-house"></i>
+                            Bosh sahifaga qaytish
+                        </a>
+                    </div>
+                </form>
             </div>
 
         </div>
     </div>
 </div>
-
 {% endblock %}

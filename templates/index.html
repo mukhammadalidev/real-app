@@ -1,230 +1,723 @@
-<!-- templates/index.html -->
 {% extends "base.html" %}
-
-{% block title %}Ish Kategoriyalari{% endblock %}
+{% load static %}
+{% block title %}Buxoroda Ish | Ish Kategoriyalari{% endblock %}
 
 {% block content %}
-<!-- <style>
-    .job-card {
-    transition: all 0.25s ease;
-    cursor: pointer;
-}
-
-.job-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
-}
-</style> -->
-
 <style>
     :root {
         --primary: #2563eb;
-        --dark: #0f172a;
+        --primary-dark: #1d4ed8;
+        --secondary: #0f172a;
         --muted: #64748b;
-        --bg: #f1f5f9;
+        --light: #f8fafc;
+        --border: #e2e8f0;
+        --white: #ffffff;
+        --success: #16a34a;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        --shadow-lg: 0 20px 55px rgba(15, 23, 42, 0.12);
+        --radius: 24px;
     }
 
-    body {
-        background: var(--bg);
+    .home-section {
+        margin: 70px 0;
     }
 
-    .section {
-        margin: 80px 0;
-    }
-
-    /* HERO */
-    .hero {
-        background: linear-gradient(135deg, #2563eb, #1e40af);
+    .hero-section {
+        position: relative;
+        overflow: hidden;
+        border-radius: 32px;
+        padding: 80px 50px;
+        background:
+            radial-gradient(circle at top right, rgba(96, 165, 250, 0.35), transparent 25%),
+            linear-gradient(135deg, #0f172a, #1d4ed8 55%, #2563eb);
         color: #fff;
-        border-radius: 28px;
-        padding: 80px 40px;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, .25);
+        box-shadow: 0 30px 70px rgba(37, 99, 235, 0.28);
     }
 
-    .hero h1 {
-        font-size: 52px;
+    .hero-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(120deg, rgba(255, 255, 255, 0.05), transparent 50%);
+        pointer-events: none;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        color: #fff;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 18px;
+        backdrop-filter: blur(6px);
+    }
+
+    .hero-title {
+        font-size: 54px;
+        font-weight: 800;
+        line-height: 1.08;
+        letter-spacing: -1.2px;
+        margin-bottom: 18px;
+    }
+
+    .hero-text {
+        font-size: 18px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.88);
+        max-width: 680px;
+    }
+
+    .hero-actions {
+        margin-top: 32px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .hero-stats {
+        margin-top: 40px;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 22px;
+        padding: 20px;
+        backdrop-filter: blur(10px);
+        height: 100%;
+    }
+
+    .stat-card h3 {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 6px;
+    }
+
+    .stat-card p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 14px;
+    }
+
+    .search-wrapper {
+        margin-top: -38px;
+        position: relative;
+        z-index: 20;
+    }
+
+    .search-panel {
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        border-radius: 26px;
+        padding: 18px;
+        box-shadow: var(--shadow-lg);
+        backdrop-filter: blur(10px);
+    }
+
+    .search-title {
+        font-size: 15px;
+        color: var(--muted);
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .search-panel .form-control {
+        height: 60px;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        box-shadow: none;
+        font-size: 16px;
+        padding-left: 18px;
+    }
+
+    .search-panel .form-control:focus {
+        border-color: rgba(37, 99, 235, 0.45);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+    }
+
+    .search-btn {
+        height: 60px;
+        border-radius: 18px !important;
+        min-width: 150px;
         font-weight: 700;
     }
 
-    .hero p {
-        font-size: 18px;
-        opacity: .9;
-    }
-
-    /* SEARCH */
-    .search-box {
-        margin-top: -35px;
-    }
-
-    .search-box form {
-        background: #fff;
-        padding: 18px;
-        border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, .15);
-    }
-
-    /* CATEGORY */
-    .category-card {
-        background: #fff;
-        border-radius: 20px;
-        padding: 28px;
+    .section-header {
         text-align: center;
-        transition: .3s;
+        margin-bottom: 38px;
+    }
+
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 14px;
+    }
+
+    .section-title {
+        font-size: 38px;
+        font-weight: 800;
+        color: var(--secondary);
+        margin-bottom: 10px;
+        letter-spacing: -0.8px;
+    }
+
+    .section-text {
+        color: var(--muted);
+        font-size: 16px;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .category-card {
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        border-radius: 26px;
+        padding: 28px 22px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        transition: 0.3s ease;
+        height: 100%;
     }
 
     .category-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, .15);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .category-image-box {
+        width: 88px;
+        height: 88px;
+        margin: 0 auto 18px;
+        border-radius: 22px;
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(59, 130, 246, 0.05));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
     }
 
     .category-card img {
-        height: 90px;
+        max-width: 58px;
+        max-height: 58px;
         object-fit: contain;
     }
 
-    /* JOB CARD */
+    .category-card h5 {
+        font-weight: 700;
+        font-size: 19px;
+        color: var(--secondary);
+        margin-bottom: 10px;
+    }
+
+    .category-card p {
+        color: var(--muted);
+        font-size: 14px;
+        min-height: 42px;
+        margin-bottom: 18px;
+    }
+
     .job-card {
-        background: #fff;
-        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        border-radius: 26px;
         padding: 24px;
+        box-shadow: var(--shadow);
+        transition: 0.3s ease;
         height: 100%;
-        transition: .3s;
+        display: flex;
+        flex-direction: column;
     }
 
     .job-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 25px 45px rgba(0, 0, 0, .18);
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .job-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 12px;
+        margin-bottom: 16px;
     }
 
     .job-salary {
-        font-size: 18px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--primary);
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .job-date {
+        color: var(--muted);
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .job-title {
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1.35;
+        margin-bottom: 14px;
+    }
+
+    .job-title a {
+        color: var(--secondary);
+    }
+
+    .job-title a:hover {
+        color: var(--primary);
+    }
+
+    .company-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px;
+        border-radius: 18px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        margin-bottom: 18px;
+    }
+
+    .company-box img {
+        width: 52px;
+        height: 52px;
+        object-fit: cover;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        background: #fff;
+    }
+
+    .company-name {
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 2px;
+    }
+
+    .company-location {
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .job-desc {
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.75;
+        flex-grow: 1;
+        margin-bottom: 18px;
+    }
+
+    .job-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: auto;
+    }
+
+    .job-link {
         font-weight: 700;
         color: var(--primary);
     }
 
-    /* CONTACT */
+    .job-link:hover {
+        color: var(--primary-dark);
+    }
+
     .contact-box {
+        background:
+            radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 20%),
+            rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        border-radius: 30px;
+        padding: 42px;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .contact-info-card {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        padding: 22px;
+        margin-top: 24px;
+    }
+
+    .contact-item {
+        display: flex;
+        gap: 12px;
+        align-items: start;
+        margin-bottom: 16px;
+        color: var(--secondary);
+    }
+
+    .contact-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .contact-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        border-radius: 14px;
+        background: rgba(37, 99, 235, 0.1);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .contact-form .form-control {
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        min-height: 54px;
+        box-shadow: none;
+        padding: 14px 16px;
+    }
+
+    .contact-form textarea.form-control {
+        min-height: 140px;
+        resize: none;
+    }
+
+    .contact-form .form-control:focus {
+        border-color: rgba(37, 99, 235, 0.45);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+    }
+
+    .empty-box {
         background: #fff;
-        border-radius: 28px;
-        padding: 50px;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, .15);
+        border: 1px dashed #cbd5e1;
+        border-radius: 24px;
+        padding: 40px 24px;
+        text-align: center;
+        color: var(--muted);
+    }
+
+    @media (max-width: 991px) {
+        .hero-section {
+            padding: 55px 28px;
+            border-radius: 26px;
+        }
+
+        .hero-title {
+            font-size: 40px;
+        }
+
+        .search-wrapper {
+            margin-top: -24px;
+        }
+
+        .contact-box {
+            padding: 24px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-title {
+            font-size: 32px;
+        }
+
+        .hero-text {
+            font-size: 15px;
+        }
+
+        .section-title {
+            font-size: 28px;
+        }
+
+        .search-panel {
+            padding: 14px;
+        }
+
+        .search-btn {
+            width: 100%;
+        }
+
+        .job-footer {
+            flex-direction: column;
+            align-items: start;
+        }
     }
 </style>
 
-<div class="hero text-center mb-5">
-    <h1>Buxoroda ish topish endi oson</h1>
-    <p class="mt-3">Eng so‘nggi vakansiyalar, ishonchli ish beruvchilar va tez aloqa</p>
-    <a href="#jobs" class="btn btn-light btn-lg mt-4 px-5 rounded-pill">
-        Ishlarni ko‘rish
-    </a>
+<div class="hero-section">
+    <div class="hero-badge">
+        <i class="fa-solid fa-briefcase"></i>
+        Buxorodagi ishonchli ish platformasi
+    </div>
+
+    <h1 class="hero-title">Buxoroda ish topish endi ancha oson va tez</h1>
+
+    <p class="hero-text">
+        Eng so‘nggi vakansiyalarni ko‘ring, ishonchli ish beruvchilar bilan bog‘laning
+        va o‘zingizga mos ishni bir joyning o‘zidan toping.
+    </p>
+
+    <div class="hero-actions">
+        <a href="#jobs" class="btn btn-light btn-lg px-4">
+            <i class="fa-solid fa-magnifying-glass me-2"></i>
+            Ishlarni ko‘rish
+        </a>
+        <a href="{% url 'search' %}" class="btn btn-outline-light btn-lg px-4">
+            <i class="fa-solid fa-briefcase me-2"></i>
+            Barcha vakansiyalar
+        </a>
+    </div>
+
+    <div class="hero-stats">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <h3>{{ latest_jobs|length }}+</h3>
+                    <p>So‘nggi joylangan ish e’lonlari</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <h3>{{ categories.all|length }}+</h3>
+                    <p>Turli yo‘nalishdagi ish kategoriyalari</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <h3>24/7</h3>
+                    <p>Platformadan istalgan payt foydalanish imkoniyati</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-
-<!-- Qidiruv formasi -->
-<div class="search-box">
-    <form class="input-group" method="get" action="{% url 'search' %}">
-        <input type="search" name="q" class="form-control form-control-lg border-0"
-            placeholder="Dasturchi, marketing, dizayner..." value="{{ query }}">
-        <button class="btn btn-primary btn-lg px-4">
-            Qidirish
-        </button>
-    </form>
+<div class="search-wrapper">
+    <div class="search-panel">
+        <div class="search-title">Kasb, lavozim yoki yo‘nalish bo‘yicha qidiring</div>
+        <form method="get" action="{% url 'search' %}">
+            <div class="row g-3">
+                <div class="col-lg-9">
+                    <input
+                        type="search"
+                        name="q"
+                        class="form-control"
+                        placeholder="Masalan: Frontend developer, marketolog, dizayner..."
+                        value="{{ query }}"
+                    >
+                </div>
+                <div class="col-lg-3">
+                    <button class="btn btn-primary search-btn w-100">
+                        <i class="fa-solid fa-magnifying-glass me-2"></i>
+                        Qidirish
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
+<div class="home-section">
+    <div class="section-header">
+        <div class="section-badge">
+            <i class="fa-solid fa-layer-group"></i>
+            Kategoriyalar
+        </div>
+        <h2 class="section-title">Ish kategoriyalari</h2>
+        <p class="section-text">
+            O‘zingizga mos sohani tanlang va kerakli yo‘nalish bo‘yicha vakansiyalarni tez toping.
+        </p>
+    </div>
 
-<!-- Kategoriyalar -->
-<div class="section">
-    <h2 class="fw-bold text-center mb-5">Ish Kategoriyalari</h2>
     <div class="row g-4">
         {% for category in categories.all %}
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-6">
             <div class="category-card">
-                <img src="{{ category.image }}">
-                <h5 class="fw-semibold mt-3">{{ category.title }}</h5>
-                <a href="{% url 'job:category' category.pk %}" class="btn btn-outline-primary rounded-pill mt-3">
+                <div class="category-image-box">
+                    <img src="{{ category.image }}" alt="{{ category.title }}">
+                </div>
+                <h5>{{ category.title }}</h5>
+                <p>Ushbu kategoriya bo‘yicha mavjud ish e’lonlarini ko‘rib chiqing.</p>
+                <a href="{% url 'job:category' category.pk %}" class="btn btn-outline-primary rounded-pill px-4">
                     Ko‘rish
                 </a>
             </div>
         </div>
-        {% endfor %}
-    </div>
-</div>
-
-<div id="jobs" class="section">
-    <h2 class="fw-bold text-center mb-5">So‘nggi ishlar</h2>
-
-    <div class="row g-4">
-        {% for job in latest_jobs %}
-        <div class="col-md-4">
-            <div class="job-card">
-                {% if job.salary %}
-                <div class="job-salary">{{ job.salary }}</div>
-                {% endif %}
-
-                <h5 class="mt-2">
-                    <a href="{% url 'job:job-detail' job.pk %}" class="text-dark text-decoration-none">
-                        {{ job.title }}
-                    </a>
-                </h5>
-
-                <div class="d-flex align-items-center my-3">
-                    <img src="{{ job.employer.logo.url }}" width="42" class="rounded me-2">
-                    <div class="small text-muted">
-                        {{ job.employer.company_name }}<br>📍 {{ job.location }}
-                    </div>
-                </div>
-
-                <p class="text-muted small">
-                    {{ job.description|truncatewords:16 }}
-                </p>
-
-                <div class="d-flex justify-content-between small">
-                    <span class="text-muted">{{ job.created_at|date:"d M Y" }}</span>
-                    <a href="{% url 'job:job-detail' job.pk %}" class="fw-semibold text-primary">
-                        Batafsil →
-                    </a>
-                </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-box">
+                Hozircha kategoriyalar mavjud emas.
             </div>
         </div>
         {% endfor %}
     </div>
 </div>
 
-<div class="section">
-    <div class="contact-box">
-        <div class="row g-5">
-            <div class="col-md-6">
-                <h3 class="fw-bold">Biz bilan bog‘laning</h3>
-                <p class="text-muted mt-3">
-                    Savollaringiz bo‘lsa, biz doimo aloqadamiz.
+<div id="jobs" class="home-section">
+    <div class="section-header">
+        <div class="section-badge">
+            <i class="fa-solid fa-fire"></i>
+            So‘nggi vakansiyalar
+        </div>
+        <h2 class="section-title">Yangi joylangan ishlar</h2>
+        <p class="section-text">
+            Buxorodagi eng so‘nggi ish e’lonlarini ko‘rib chiqing va mos ishga darhol murojaat qiling.
+        </p>
+    </div>
+
+    <div class="row g-4">
+        {% for job in latest_jobs %}
+        <div class="col-lg-4 col-md-6">
+            <div class="job-card">
+                <div class="job-top">
+                    {% if job.salary %}
+                    <div class="job-salary">
+                        <i class="fa-solid fa-wallet"></i>
+                        {{ job.salary }}
+                    </div>
+                    {% else %}
+                    <div class="job-salary">
+                        <i class="fa-solid fa-briefcase"></i>
+                        Kelishiladi
+                    </div>
+                    {% endif %}
+
+                    <div class="job-date">
+                        {{ job.created_at|date:"d M Y" }}
+                    </div>
+                </div>
+
+                <h5 class="job-title">
+                    <a href="{% url 'job:job-detail' job.pk %}">
+                        {{ job.title }}
+                    </a>
+                </h5>
+
+                <div class="company-box">
+                    {% if job.employer.logo %}
+                    <img src="{{ job.employer.logo.url }}" alt="{{ job.employer.company_name }}">
+                    {% else %}
+                    <img src="{% static 'images/logo.png' %}" alt="{{ job.employer.company_name }}">
+                    {% endif %}
+
+                    <div>
+                        <div class="company-name">{{ job.employer.company_name }}</div>
+                        <div class="company-location">
+                            <i class="fa-solid fa-location-dot me-1"></i>
+                            {{ job.location }}
+                        </div>
+                    </div>
+                </div>
+
+                <p class="job-desc">
+                    {{ job.description|truncatewords:18 }}
                 </p>
-                <p>📞 +998 99 260 62 96</p>
-                <p>✉ info@buxoroda-ish.uz</p>
-                <p>📍 Buxoro</p>
+
+                <div class="job-footer">
+                    <span class="text-muted small">
+                        <i class="fa-solid fa-clock me-1"></i>
+                        Tezkor ko‘rib chiqing
+                    </span>
+                    <a href="{% url 'job:job-detail' job.pk %}" class="job-link">
+                        Batafsil <i class="fa-solid fa-arrow-right-long ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-box">
+                Hozircha ish e’lonlari mavjud emas.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="home-section">
+    <div class="contact-box">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-5">
+                <div class="section-badge">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                    Aloqa
+                </div>
+                <h2 class="section-title text-start mb-3">Biz bilan bog‘laning</h2>
+                <p class="section-text text-start mx-0">
+                    Platforma haqida savollaringiz bo‘lsa yoki hamkorlik masalalari bo‘yicha bog‘lanmoqchi bo‘lsangiz,
+                    biz sizga mamnuniyat bilan yordam beramiz.
+                </p>
+
+                <div class="contact-info-card">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div>
+                            <strong>Telefon</strong><br>
+                            +998 99 260 62 96
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div>
+                            <strong>Email</strong><br>
+                            info@buxoroda-ish.uz
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <strong>Manzil</strong><br>
+                            Buxoro, O‘zbekiston
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-md-6">
-                <form method="post" action="{% url 'contact' %}">
+            <div class="col-lg-7">
+                <form method="post" action="{% url 'contact' %}" class="contact-form">
                     {% csrf_token %}
-                    <input class="form-control mb-3" name="name" placeholder="Ismingiz">
-                    <input class="form-control mb-3" name="email" placeholder="Email">
-                    <textarea class="form-control mb-3" rows="4" name="message" placeholder="Xabar"></textarea>
-                    <button class="btn btn-primary btn-lg w-100 rounded-pill">
-                        Yuborish
-                    </button>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input class="form-control" name="name" placeholder="Ismingiz" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input class="form-control" name="email" type="email" placeholder="Email manzilingiz" required>
+                        </div>
+                        <div class="col-12">
+                            <textarea class="form-control" name="message" rows="5" placeholder="Xabaringizni yozing..." required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary btn-lg w-100 rounded-pill py-3">
+                                <i class="fa-solid fa-paper-plane me-2"></i>
+                                Xabar yuborish
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    .job-card:hover {
-        transform: translateY(-5px);
-        transition: 0.3s;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
-    }
-</style>
-
-
 {% endblock %}

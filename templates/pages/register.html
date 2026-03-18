@@ -1,27 +1,220 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
+{% block title %}Ro‘yxatdan o‘tish{% endblock %}
+
 {% block content %}
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --light: #f8fafc;
+        --white: #ffffff;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        --shadow-lg: 0 20px 55px rgba(15, 23, 42, 0.12);
+    }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
+    .register-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 0;
+    }
 
-            <div class="card border-0 shadow-lg p-4 rounded-4">
-                <h3 class="text-center mb-4 fw-bold">Ro‘yxatdan o‘tish</h3>
+    .register-card {
+        width: 100%;
+        max-width: 560px;
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .register-header {
+        background:
+            radial-gradient(circle at top right, rgba(96, 165, 250, 0.22), transparent 25%),
+            linear-gradient(135deg, #0f172a, #1d4ed8 70%);
+        color: #fff;
+        padding: 30px 28px;
+        text-align: center;
+    }
+
+    .register-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        margin-bottom: 14px;
+    }
+
+    .register-title {
+        font-size: 30px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        letter-spacing: -0.4px;
+    }
+
+    .register-subtitle {
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 15px;
+        margin: 0;
+    }
+
+    .register-body {
+        padding: 30px 28px;
+        background: linear-gradient(to bottom, #ffffff, #fbfdff);
+    }
+
+    .register-note {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 14px 16px;
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 22px;
+    }
+
+    .register-note i {
+        color: var(--primary);
+        margin-right: 8px;
+    }
+
+    .register-btn {
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: linear-gradient(135deg, var(--primary), #3b82f6);
+        color: #fff;
+        border: none;
+        border-radius: 16px;
+        padding: 14px 20px;
+        font-weight: 700;
+        margin-top: 8px;
+        transition: 0.25s ease;
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+    }
+
+    .register-btn:hover {
+        transform: translateY(-2px);
+        color: #fff;
+    }
+
+    .login-box {
+        text-align: center;
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .login-link {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .login-link:hover {
+        color: var(--primary-dark);
+    }
+
+    /* crispy form styling */
+    .register-card input,
+    .register-card select,
+    .register-card textarea {
+        border-radius: 16px !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: none !important;
+        padding: 12px 14px !important;
+    }
+
+    .register-card input:focus,
+    .register-card select:focus,
+    .register-card textarea:focus {
+        border-color: rgba(37, 99, 235, 0.45) !important;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08) !important;
+    }
+
+    .register-card label {
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 8px;
+    }
+
+    .register-card .helptext,
+    .register-card .form-text,
+    .register-card small {
+        color: var(--muted) !important;
+        font-size: 13px;
+    }
+
+    @media (max-width: 576px) {
+        .register-header,
+        .register-body {
+            padding: 22px 18px;
+        }
+
+        .register-title {
+            font-size: 25px;
+        }
+
+        .register-card {
+            border-radius: 22px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="register-page">
+        <div class="register-card">
+            <div class="register-header">
+                <div class="register-badge">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Yangi hisob yaratish
+                </div>
+                <h1 class="register-title">Ro‘yxatdan o‘tish</h1>
+                <p class="register-subtitle">
+                    Platformadan to‘liq foydalanish uchun yangi hisob yarating.
+                </p>
+            </div>
+
+            <div class="register-body">
+                <div class="register-note">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Ma’lumotlarni to‘g‘ri kiriting. Bu profilingizni ishonchli va professional ko‘rsatadi.
+                </div>
 
                 <form method="POST">
                     {% csrf_token %}
                     {{ form|crispy }}
 
-                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">
+                    <button type="submit" class="register-btn">
+                        <i class="fa-solid fa-user-check"></i>
                         Ro‘yxatdan o‘tish
                     </button>
                 </form>
-            </div>
 
+                <div class="login-box">
+                    Allaqachon hisobingiz bormi?
+                    <a href="{% url 'users:login' %}" class="login-link">
+                        Kirish
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

@@ -2,61 +2,166 @@
 
 {% block content %}
 <style>
-    body {
-        background: linear-gradient(180deg, #f8f9ff, #f1f3ff);
-        font-family: 'Inter', sans-serif;
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --light: #f8fafc;
+        --white: #ffffff;
+        --success-bg: #dcfce7;
+        --success-text: #166534;
+        --danger: #dc2626;
+        --danger-soft: #fee2e2;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.12);
     }
 
-    .jobs-wrapper {
-        max-width: 1100px;
-        margin: auto;
+    .jobs-page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 10px 0 30px;
     }
 
-    /* Search Box */
-    .search-box {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(8px);
-        border-radius: 20px;
+    .search-panel {
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        border-radius: 28px;
         padding: 22px;
-        border: 1px solid #e8e8ff;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--shadow-lg);
+        backdrop-filter: blur(10px);
+        margin-bottom: 22px;
     }
 
-    .search-box input {
-        border-radius: 14px;
-        padding: 14px 18px;
-        font-size: 15px;
+    .search-panel-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
     }
 
-    .search-box button {
-        border-radius: 14px;
-        padding: 14px 32px;
-        font-weight: 600;
-    }
-
-    /* Results Header */
-    .results-header {
-        background: linear-gradient(135deg, #5f6cff, #8f6aff);
-        color: white;
-        border-radius: 20px;
-        padding: 24px;
-        margin-bottom: 28px;
-        box-shadow: 0 15px 30px rgba(95, 108, 255, 0.3);
-    }
-
-    .results-header h4 {
+    .search-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--primary);
         font-weight: 700;
-        font-size: 22px;
+        font-size: 14px;
+        padding: 8px 14px;
+        border-radius: 999px;
     }
 
-    /* Job Card */
+    .search-help {
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .search-input-wrap {
+        position: relative;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 15px;
+        z-index: 2;
+    }
+
+    .search-input {
+        height: 60px;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        padding-left: 48px;
+        font-size: 15px;
+        box-shadow: none !important;
+    }
+
+    .search-input:focus {
+        border-color: rgba(37, 99, 235, 0.45);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08) !important;
+    }
+
+    .search-btn {
+        height: 60px;
+        border-radius: 18px;
+        font-weight: 700;
+        min-width: 150px;
+    }
+
+    .filter-bar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 22px;
+    }
+
+    .filter-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 18px;
+        border-radius: 16px;
+        background: #fff;
+        border: 1px solid var(--border);
+        color: var(--secondary);
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.25s ease;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+        font-size: 14px;
+    }
+
+    .filter-btn:hover {
+        transform: translateY(-2px);
+        border-color: rgba(37, 99, 235, 0.35);
+        color: var(--primary);
+    }
+
+    .filter-btn.active {
+        background: linear-gradient(135deg, var(--primary), #3b82f6);
+        color: #fff;
+        border-color: transparent;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+    }
+
+    .results-banner {
+        background:
+            radial-gradient(circle at top right, rgba(96, 165, 250, 0.25), transparent 25%),
+            linear-gradient(135deg, #0f172a, #1d4ed8 70%);
+        color: #fff;
+        border-radius: 28px;
+        padding: 28px;
+        margin-bottom: 24px;
+        box-shadow: 0 20px 45px rgba(37, 99, 235, 0.25);
+    }
+
+    .results-count {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .results-subtext {
+        color: rgba(255, 255, 255, 0.84);
+        font-size: 15px;
+        margin: 0;
+    }
+
     .job-card {
-        background: white;
-        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        border-radius: 28px;
         padding: 26px;
-        border: 1px solid #ececff;
         margin-bottom: 18px;
-        transition: all .35s ease;
+        transition: 0.3s ease;
+        box-shadow: var(--shadow);
         position: relative;
         overflow: hidden;
     }
@@ -65,220 +170,367 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(120deg, transparent, rgba(95, 108, 255, .08), transparent);
+        background: linear-gradient(120deg, transparent, rgba(37, 99, 235, 0.05), transparent);
         opacity: 0;
-        transition: .3s;
+        transition: 0.3s ease;
         pointer-events: none;
+    }
+
+    .job-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+        border-color: rgba(37, 99, 235, 0.25);
     }
 
     .job-card:hover::before {
         opacity: 1;
     }
 
-    .job-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-        border-color: #5f6cff;
-    }
-
-    .job-title {
-        font-weight: 700;
-        font-size: 21px;
-        color: #1f1f1f;
-        margin-bottom: 10px;
-    }
-
-    .company-name {
-        color: #5f6cff;
-        font-weight: 600;
-        font-size: 15px;
+    .job-card-inner {
         display: flex;
-        gap: 6px;
-        align-items: center;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 24px;
     }
 
-    .location-text {
-        color: #7b7b7b;
-        font-size: 14px;
-        margin-bottom: 14px;
+    .job-main {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .job-meta-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
     }
 
     .salary-badge {
-        background: linear-gradient(135deg, #d1f4e0, #bdf1d4);
-        color: #0a7c3e;
-        padding: 8px 18px;
-        border-radius: 12px;
-        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--success-bg);
+        color: var(--success-text);
+        padding: 9px 16px;
+        border-radius: 999px;
+        font-weight: 800;
         font-size: 14px;
     }
 
-    /* Buttons */
-    .btn-view {
-        background: linear-gradient(135deg, #5f6cff, #7b6cff);
-        color: white;
-        border-radius: 14px;
-        padding: 10px 26px;
+    .job-date {
+        color: var(--muted);
+        font-size: 13px;
         font-weight: 600;
+    }
+
+    .job-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--secondary);
+        line-height: 1.35;
+        margin-bottom: 14px;
+    }
+
+    .job-title a {
+        color: var(--secondary);
+        text-decoration: none;
+    }
+
+    .job-title a:hover {
+        color: var(--primary);
+    }
+
+    .company-line {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 15px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+    }
+
+    .location-line {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .job-description {
+        color: #475569;
+        font-size: 15px;
+        line-height: 1.75;
+        margin-bottom: 0;
+        max-width: 760px;
+    }
+
+    .job-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        min-width: 165px;
+    }
+
+    .btn-view-job {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: linear-gradient(135deg, var(--primary), #3b82f6);
+        color: #fff;
+        border-radius: 16px;
+        padding: 12px 20px;
+        font-weight: 700;
+        text-decoration: none;
         border: none;
-        text-decoration: none;
-        transition: .25s;
+        transition: 0.25s ease;
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
     }
 
-    .btn-view:hover {
-        opacity: .9;
-        transform: scale(1.05);
+    .btn-view-job:hover {
+        color: #fff;
+        transform: translateY(-2px);
     }
 
-    .btn-delete {
-        background: transparent;
-        color: #ff4d4f;
-        border: 2px solid #ff4d4f;
-        border-radius: 14px;
-        padding: 8px 20px;
-        font-weight: 600;
-        transition: .25s;
+    .btn-delete-job {
+        background: #fff;
+        color: var(--danger);
+        border: 1.5px solid #fecaca;
+        border-radius: 16px;
+        padding: 11px 18px;
+        font-weight: 700;
+        transition: 0.25s ease;
     }
 
-    .btn-delete:hover {
-        background: #ff4d4f;
-        color: white;
+    .btn-delete-job:hover {
+        background: var(--danger);
+        color: #fff;
+        border-color: var(--danger);
     }
 
-    /* Empty State */
     .empty-state {
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px dashed #cbd5e1;
+        border-radius: 28px;
+        padding: 70px 24px;
         text-align: center;
-        padding: 70px 20px;
-        background: white;
-        border-radius: 22px;
-        border: 1px dashed #dcdcff;
+        box-shadow: var(--shadow);
     }
 
-    .empty-state-icon {
-        font-size: 70px;
-        margin-bottom: 20px;
+    .empty-icon {
+        width: 90px;
+        height: 90px;
+        margin: 0 auto 20px;
+        border-radius: 24px;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 38px;
     }
 
-    .filter-btn {
-        padding: 10px 18px;
-        border-radius: 14px;
-        background: white;
-        border: 1px solid #e0e0ff;
-        color: #5f6cff;
-        font-weight: 600;
-        text-decoration: none;
-        transition: .25s;
-        font-size: 14px;
+    .empty-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--secondary);
+        margin-bottom: 10px;
     }
 
-    .filter-btn:hover {
-        background: #5f6cff;
-        color: white;
+    .empty-text {
+        color: var(--muted);
+        font-size: 15px;
+        margin-bottom: 0;
     }
 
-    .filter-btn.active {
-        background: linear-gradient(135deg, #5f6cff, #7b6cff);
-        color: white;
-        box-shadow: 0 8px 20px rgba(95, 108, 255, 0.3);
+    @media (max-width: 991px) {
+        .job-card-inner {
+            flex-direction: column;
+        }
+
+        .job-actions {
+            width: 100%;
+            min-width: unset;
+        }
+
+        .btn-view-job,
+        .btn-delete-job {
+            width: 100%;
+        }
     }
 
+    @media (max-width: 576px) {
+        .jobs-page {
+            padding-top: 0;
+        }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-        .job-card>div {
-            flex-direction: column !important;
-            gap: 18px;
+        .search-panel,
+        .results-banner,
+        .job-card,
+        .empty-state {
+            border-radius: 22px;
+        }
+
+        .results-count {
+            font-size: 22px;
+        }
+
+        .job-title {
+            font-size: 20px;
+        }
+
+        .search-btn {
+            width: 100%;
         }
     }
 </style>
 
+<div class="container py-5">
+    <div class="jobs-page">
 
-<div class="container py-5 jobs-wrapper">
-
-    <!-- Search Bar -->
-    <div class="search-box mb-4">
-        <form method="GET" action="{% url 'search' %}">
-            <div class="input-group">
-                <input type="text" class="form-control border-end-0"
-                    placeholder="🔍 Kasb nomi, kompaniya yoki kalit so'z..." name="q" value="{{ query }}">
-                <button class="btn btn-primary" type="submit">Qidirish</button>
-            </div>
-        </form>
-    </div>
-
-    <!-- Date Filters -->
-    <div class="d-flex gap-2 mb-4 flex-wrap">
-        <a href="?date=today{% if query %}&q={{ query }}{% endif %}"
-            class="filter-btn {% if request.GET.date == 'today' %}active{% endif %}">
-            🟢 Bugungi ishlar
-        </a>
-
-        <a href="?date=yesterday{% if query %}&q={{ query }}{% endif %}"
-            class="filter-btn {% if request.GET.date == 'yesterday' %}active{% endif %}">
-            🟡 Kechagi ishlar
-        </a>
-
-        <a href="{% url 'search' %}{% if query %}?q={{ query }}{% endif %}"
-            class="filter-btn {% if not request.GET.date %}active{% endif %}">
-            🔵 Barchasi
-        </a>
-    </div>
-
-
-    <!-- Results Header -->
-    <div class="results-header">
-        <h4>📋 Natijalar: {{ jobs.count }} ta ish topildi</h4>
-    </div>
-
-    <!-- Job List -->
-    {% for job in jobs %}
-    <div class="job-card">
-        <div class="d-flex justify-content-between align-items-start">
-
-            <div class="flex-grow-1">
-                <h5 class="job-title">{{ job.title|default:"Sarlovha mavjud emas"|truncatewords:10 }}</h5>
-
-                <p class="company-name">
-                    <svg width="16" height="16" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
-                        <path
-                            d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1ZM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z" />
-                        <path
-                            d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V1Zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3V1Z" />
-                    </svg>
-                    {{ job.employer.company_name }}
-                </p>
-
-                <p class="location-text">
-                    <i class="bi bi-geo-alt-fill"></i> {{ job.location }}
-                </p>
-
-                <span class="salary-badge">
-                    💰 {{ job.salary|default:"Kelishiladi" }}
-                </span>
+        <!-- Search -->
+        <div class="search-panel">
+            <div class="search-panel-top">
+                <div class="search-badge">
+                    <i class="fa-solid fa-briefcase"></i>
+                    Ishlarni qidirish
+                </div>
+                <div class="search-help">
+                    Kasb, kompaniya yoki kalit so‘z bo‘yicha izlang
+                </div>
             </div>
 
-            <div class="action-buttons">
-                <a href="{% url 'job:job-detail' job.pk %}" class="btn-view">
-                    Ko'rish →
-                </a>
-                {% if request.user.is_superuser %}
-                <form method="post" action="{% url 'job_delete' job.pk %}" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn-delete"
-                        onclick="return confirm('Rostdan ham o\'chirmoqchimisiz?');">
-                        O'chirish
-                    </button>
-                </form>
-                {% endif %}
+            <form method="GET" action="{% url 'search' %}">
+                <div class="row g-3">
+                    <div class="col-lg-9">
+                        <div class="search-input-wrap">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input
+                                type="text"
+                                class="form-control search-input"
+                                placeholder="Masalan: Frontend developer, marketolog, dizayner..."
+                                name="q"
+                                value="{{ query }}"
+                            >
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <button class="btn btn-primary search-btn w-100" type="submit">
+                            Qidirish
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-bar">
+            <a href="?date=today{% if query %}&q={{ query }}{% endif %}"
+               class="filter-btn {% if request.GET.date == 'today' %}active{% endif %}">
+                <i class="fa-solid fa-calendar-day"></i>
+                Bugungi ishlar
+            </a>
+
+            <a href="?date=yesterday{% if query %}&q={{ query }}{% endif %}"
+               class="filter-btn {% if request.GET.date == 'yesterday' %}active{% endif %}">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                Kechagi ishlar
+            </a>
+
+            <a href="{% url 'search' %}{% if query %}?q={{ query }}{% endif %}"
+               class="filter-btn {% if not request.GET.date %}active{% endif %}">
+                <i class="fa-solid fa-layer-group"></i>
+                Barchasi
+            </a>
+        </div>
+
+        <!-- Results -->
+        <div class="results-banner">
+            <div class="results-count">{{ jobs.count }} ta ish topildi</div>
+            <p class="results-subtext">
+                Siz qidirgan so‘rov bo‘yicha mos vakansiyalar ro‘yxati.
+            </p>
+        </div>
+
+        <!-- Job list -->
+        {% for job in jobs %}
+        <div class="job-card">
+            <div class="job-card-inner">
+                <div class="job-main">
+                    <div class="job-meta-top">
+                        <div class="salary-badge">
+                            <i class="fa-solid fa-wallet"></i>
+                            {{ job.salary|default:"Kelishiladi" }}
+                        </div>
+                        {% if job.created_at %}
+                        <div class="job-date">
+                            <i class="fa-regular fa-calendar me-1"></i>
+                            {{ job.created_at|date:"d M Y" }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <h3 class="job-title">
+                        <a href="{% url 'job:job-detail' job.pk %}">
+                            {{ job.title|default:"Sarlavha mavjud emas"|truncatewords:10 }}
+                        </a>
+                    </h3>
+
+                    <div class="company-line">
+                        <i class="fa-regular fa-building"></i>
+                        {{ job.employer.company_name }}
+                    </div>
+
+                    <div class="location-line">
+                        <i class="fa-solid fa-location-dot"></i>
+                        {{ job.location }}
+                    </div>
+
+                    {% if job.description %}
+                    <p class="job-description">
+                        {{ job.description|truncatewords:24 }}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <div class="job-actions">
+                    <a href="{% url 'job:job-detail' job.pk %}" class="btn-view-job">
+                        Ko‘rish
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+                    {% if request.user.is_superuser %}
+                    <form method="post" action="{% url 'job_delete' job.pk %}">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="btn-delete-job w-100"
+                                onclick="return confirm('Rostdan ham o‘chirmoqchimisiz?');">
+                            O‘chirish
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
             </div>
         </div>
+        {% empty %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <h3 class="empty-title">Hech qanday ish topilmadi</h3>
+            <p class="empty-text">
+                Qidiruv natijasi bo‘yicha hozircha mos ish e’lonlari mavjud emas.
+            </p>
+        </div>
+        {% endfor %}
     </div>
-    {% empty %}
-    <div class="empty-state">
-        <div class="empty-state-icon">🔍</div>
-        <h4>Hech qanday ish topilmadi</h4>
-        <p>Qidiruv natijasi bo'yicha ish e'lonlari mavjud emas</p>
-    </div>
-    {% endfor %}
 </div>
 
 {% endblock %}
